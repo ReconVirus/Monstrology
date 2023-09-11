@@ -1,7 +1,7 @@
 {
 	"name": "Monstrology",
 	"version": "0.0.0",
-	"description": " Visual flair that displays an icon or icon font next to a monster name based on its type.",
+	"description": "Visual flair that displays an icon or icon font next to a monster name based on its type.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs && sass --no-source-map src/Style.sass:dist/Style.css",
