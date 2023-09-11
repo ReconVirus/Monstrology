@@ -1,0 +1,33 @@
+{
+	"name": "Monstrology",
+	"version": "0.0.0",
+	"description": " Visual flair that displays an icon or icon font next to a monster name based on its type.",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs && sass --no-source-map src/Style.sass:dist/Style.css",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && sass --no-source-map src/Style.scss:dist/Style.css"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@codemirror/language": "https://github.com/lishid/cm-language",
+		"@types/node": "^16.11.6",
+		"@types/react": "^18.2.21",
+		"@types/react-dom": "^18.2.7",
+		"@typescript-eslint/eslint-plugin": "5.29.0",
+		"@typescript-eslint/parser": "5.29.0",
+		"builtin-modules": "3.3.0",
+		"dotenv": "^16.3.1",
+		"esbuild": "0.17.3",
+		"obsidian": "latest",
+		"sass": "^1.66.1",
+		"tslib": "2.4.0",
+		"typescript": "latest"
+	},
+	"dependencies": {
+		"d": "^1.0.1",
+		"react-dom": "^18.2.0",
+		"react-icons": "^4.11.0"
+	}
+}

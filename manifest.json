@@ -1,0 +1,10 @@
+{
+	"id": "Monstrology",
+	"name": "Monstrology",
+	"version": "0.0.0",
+	"minAppVersion": "1.0.0",
+	"description": "Displays monster icons",
+	"author": "ReconVirus",
+	"authorUrl": "https://github.com/ReconVirus",
+	"isDesktopOnly": false
+}
