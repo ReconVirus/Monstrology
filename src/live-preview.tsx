@@ -1,10 +1,8 @@
-
 import Monstrology, { MONSTER_ICONS, MON_CLASS } from "./Main"
 import { PluginValue, EditorView, ViewPlugin, ViewUpdate, WidgetType, Decoration, DecorationSet } from "@codemirror/view"
 import { RangeSetBuilder } from '@codemirror/state';
 import { syntaxTree } from "@codemirror/language";
 import { editorLivePreviewField } from "obsidian";
-
 import * as ReactDOM from 'react-dom';
 
 class MonstrologyWidget extends WidgetType {
