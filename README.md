@@ -23,27 +23,30 @@
 
 <!-- ABOUT THE PROJECT -->
 <h2 align="center"> About The Project</h2>
-
+Monstrology is a project that aims to add some visual flair to the names of monsters in various games and media. It uses an icon or icon font to represent the type of the monster, such as dragon, zombie, alien, etc. This way, you can easily identify the monster’s characteristics and abilities at a glance. Monstrology is a fun and creative way to enhance your gaming experience and immerse yourself in the world of monsters.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE -->
 ## Usage
-
-```ssh
-`mon:Beast`
-```
+For each monster type that you want to display, use the syntax 
+``
+`mon:Type`
+ `` 
+in your text, where Type is one of the supporting keys you want to display
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 - [ ] Add Changelog
-- [ ] Add more more classes
+- [ ] Add more monster types
 - [ ] Finish settings
 - [ ] Make it more standardized with Dice Roller and Pf2-Actions
 - [ ] Additonal Features
   - [ ] Change the icon's color
   - [ ] Change the icon's size
+  - [ ] Change Tigger Word
+  - [ ] Support icon-linking 
 
 See the [open issues]() for a full list of proposed features (and known issues).
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
