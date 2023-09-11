@@ -11,18 +11,20 @@ import {SiElement} from 'react-icons/si'
 export const MON_CLASS = 'MonsterType'
 export const TRIGGER_WORD = 'mon'
 
+const globalStyle = {verticalAlign: 'sub', fontSize: '1.5em'};
+
 export const MONSTER_ICONS: { 
 	[key: string]: JSX.Element } = {
-	Beast: <GiFlatPawPrint style={{color: 'darkmagenta'}}/>,
-	Cursed: <GiCursedStar style={{color: 'ghostwhite'}}/>,
-	Draconid: <FaDragon style={{color: 'gold'}}/>,
-	Elementa: <SiElement style={{color: 'lightblue'}}/>,
-	Hybrid: <GiDoubleFaceMask style={{color: 'yellow'}}/>,
-	Insectoid: <GiMaggot style={{color: 'yellowgreen'}}/>,
-	Necrophage: <GiTombstone style={{color: 'gray'}}/>,
-	Ogroid: <GiMuscleUp style={{color: 'orange'}}/>,
-	Specter: <GiHood style={{color: 'ghostwhite'}}/>,
-	Vampire: <GiBatwingEmblem style={{color: 'crimson'}}/>,
+	Beast: <GiFlatPawPrint style={{...globalStyle, color: 'darkmagenta'}}/>,
+	Cursed: <GiCursedStar style={{...globalStyle, color: 'ghostwhite'}}/>,
+	Draconid: <FaDragon style={{...globalStyle, color: 'gold'}}/>,
+	Elementa: <SiElement style={{...globalStyle, color: 'lightblue'}}/>,
+	Hybrid: <GiDoubleFaceMask style={{...globalStyle, color: 'yellow'}}/>,
+	Insectoid: <GiMaggot style={{...globalStyle, color: 'yellowgreen'}}/>,
+	Necrophage: <GiTombstone style={{...globalStyle, color: 'gray'}}/>,
+	Ogroid: <GiMuscleUp style={{...globalStyle, color: 'orange'}}/>,
+	Specter: <GiHood style={{...globalStyle, color: 'ghostwhite'}}/>,
+	Vampire: <GiBatwingEmblem style={{...globalStyle, color: 'crimson'}}/>,
 }
 
 export default class Monstrology extends Plugin {
