@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/ReconVirus">
-    <img src="" alt="Logo" width="80" height="80">
+    <img src="https://github.com/ReconVirus/Monstrology/assets/43733760/2af7ba13-0532-45d4-b1fe-32d59ba42095" alt="Logo" width="80" height="80">
   </a>
   <h1 align="center">Monstrology</h1>
 </div>
