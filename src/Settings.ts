@@ -2,29 +2,33 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import Monstrology, { MON_CLASS } from "./Main";
 
 export interface MonstorlogySettings {
-    BeastString: string;
-	CursedString: string;
-	DraconidString: string;
-	ElementaString: string;
-	HybridString: string;
-	InsectoidString: string;
-	NecrophageString: string;
-	OgroidString: string;
-	SpecterString: string;
-	VampireString: string;
+    Beast: string;
+    Celestial: string;
+	Cursed: string;
+	Draconid: string;
+	Elementa: string;
+	Hybrid: string;
+	Insectoid: string;
+	Necrophage: string;
+	Ogroid: string;
+    Plant: string;
+	Specter: string;
+	Vampire: string;
 }
 
 export const DEFAULT_SETTINGS: MonstorlogySettings = {
-    BeastString: 'Beast',
-	CursedString: 'Cursed',
-	DraconidString: 'Draconid',
-	ElementaString: 'Elementa',
-	HybridString: 'Hybrid',
-	InsectoidString: 'Insectoid',
-	NecrophageString: 'Necrophage',
-	OgroidString: 'Ogroid',
-	SpecterString: 'Specter',
-	VampireString: 'Vampire'
+    Beast: 'Beast',
+    Celestial: 'Celestial',
+	Cursed: 'Cursed',
+	Draconid: 'Draconid',
+	Elementa: 'Elementa',
+	Hybrid: 'Hybrid',
+	Insectoid: 'Insectoid',
+	Necrophage: 'Necrophage',
+	Ogroid: 'Ogroid',
+    Plant: 'Plant',
+	Specter: 'Specter',
+	Vampire: 'Vampire'
 }
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
@@ -48,56 +52,170 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
             .setName(
                 createFragment(e => {
                     e.createSpan({text: 'Beast', cls: MON_CLASS})
-                    e.createSpan({text: 'Beast'})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.BeastString)
-                .setValue(this.plugin.settings.BeastString)
+                .setPlaceholder(DEFAULT_SETTINGS.Beast)
+                .setValue(this.plugin.settings.Beast)
                 .onChange(async (value) => {
-                    this.plugin.settings.BeastString = value || DEFAULT_SETTINGS.BeastString;
+                    this.plugin.settings.Beast = value || DEFAULT_SETTINGS.Beast;
                     await this.plugin.saveSettings();
+                })
+            )
+            new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Celestial', cls: MON_CLASS})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.CursedString)
-                .setValue(this.plugin.settings.CursedString)
+                .setPlaceholder(DEFAULT_SETTINGS.Celestial)
+                .setValue(this.plugin.settings.Celestial)
                 .onChange(async (value) => {
-                    this.plugin.settings.CursedString = value || DEFAULT_SETTINGS.CursedString;
+                    this.plugin.settings.Celestial = value || DEFAULT_SETTINGS.Celestial;
                     await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Cursed', cls: MON_CLASS})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.DraconidString)
-                .setValue(this.plugin.settings.DraconidString)
+                .setPlaceholder(DEFAULT_SETTINGS.Cursed)
+                .setValue(this.plugin.settings.Cursed)
                 .onChange(async (value) => {
-                    this.plugin.settings.DraconidString = value || DEFAULT_SETTINGS.DraconidString;
+                    this.plugin.settings.Cursed = value || DEFAULT_SETTINGS.Cursed;
                     await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Draconid', cls: MON_CLASS})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.ElementaString)
-                .setValue(this.plugin.settings.ElementaString)
+                .setPlaceholder(DEFAULT_SETTINGS.Draconid)
+                .setValue(this.plugin.settings.Draconid)
                 .onChange(async (value) => {
-                    this.plugin.settings.ElementaString = value || DEFAULT_SETTINGS.ElementaString;
+                    this.plugin.settings.Draconid = value || DEFAULT_SETTINGS.Draconid;
                     await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Elementa', cls: MON_CLASS})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.HybridString)
-                .setValue(this.plugin.settings.HybridString)
+                .setPlaceholder(DEFAULT_SETTINGS.Elementa)
+                .setValue(this.plugin.settings.Elementa)
                 .onChange(async (value) => {
-                    this.plugin.settings.HybridString = value || DEFAULT_SETTINGS.HybridString;
+                    this.plugin.settings.Elementa = value || DEFAULT_SETTINGS.Elementa;
                     await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Hybrid', cls: MON_CLASS})
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.InsectoidString)
-                .setValue(this.plugin.settings.InsectoidString)
+                .setPlaceholder(DEFAULT_SETTINGS.Hybrid)
+                .setValue(this.plugin.settings.Hybrid)
                 .onChange(async (value) => {
-                    this.plugin.settings.InsectoidString = value || DEFAULT_SETTINGS.InsectoidString;
+                    this.plugin.settings.Hybrid = value || DEFAULT_SETTINGS.Hybrid;
                     await this.plugin.saveSettings();
                 })
             )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Insectoid', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Insectoid)
+                .setValue(this.plugin.settings.Insectoid)
+                .onChange(async (value) => {
+                    this.plugin.settings.Insectoid = value || DEFAULT_SETTINGS.Insectoid;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Necrophage', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Necrophage)
+                .setValue(this.plugin.settings.Necrophage)
+                .onChange(async (value) => {
+                    this.plugin.settings.Necrophage = value || DEFAULT_SETTINGS.Necrophage;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Ogroid', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Ogroid)
+                .setValue(this.plugin.settings.Ogroid)
+                .onChange(async (value) => {
+                    this.plugin.settings.Ogroid = value || DEFAULT_SETTINGS.Ogroid;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Plant', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Plant)
+                .setValue(this.plugin.settings.Plant)
+                .onChange(async (value) => {
+                    this.plugin.settings.Plant = value || DEFAULT_SETTINGS.Plant;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Specter', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Specter)
+                .setValue(this.plugin.settings.Specter)
+                .onChange(async (value) => {
+                    this.plugin.settings.Specter = value || DEFAULT_SETTINGS.Specter;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Vampire', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Vampire)
+                .setValue(this.plugin.settings.Vampire)
+                .onChange(async (value) => {
+                    this.plugin.settings.Vampire = value || DEFAULT_SETTINGS.Vampire;
+                    await this.plugin.saveSettings();
+                })
+            )
+
     }
 }

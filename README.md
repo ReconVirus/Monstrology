@@ -38,7 +38,7 @@ in your text, where Type is one of the supporting keys you want to display
 
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] Add Changelog
+- [x] Add Changelog
 - [ ] Add more monster types
 - [ ] Finish settings
 - [ ] Make it more standardized with Dice Roller and Pf2-Actions

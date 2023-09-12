@@ -4,9 +4,10 @@ import { MonstrologyLivePlugin } from './live-preview';
 import MonstrologySettingsTab, { MonstorlogySettings, DEFAULT_SETTINGS } from './Settings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {GiBatwingEmblem, GiCursedStar, GiDoubleFaceMask, GiFlatPawPrint, GiHood, GiMaggot, GiMuscleUp, GiTombstone} from 'react-icons/gi'
-import {FaDragon} from 'react-icons/fa6'
-import {SiElement} from 'react-icons/si'
+import {GiAngelOutfit, GiArchitectMask, GiBatwingEmblem, GiCursedStar, GiFlatPawPrint, GiHood, GiMaggot, GiMuscleUp, GiTombstone} from 'react-icons/gi'
+import {FaDragon} from 'react-icons/fa6';
+import {PiPlantFill} from 'react-icons/pi';
+import {SiElement} from 'react-icons/si';
 
 export const MON_CLASS = 'MonsterType'
 export const TRIGGER_WORD = 'mon'
@@ -15,14 +16,16 @@ const globalStyle = {verticalAlign: 'sub', fontSize: '1.5em'};
 
 export const MONSTER_ICONS: { 
 	[key: string]: JSX.Element } = {
-	Beast: <GiFlatPawPrint style={{...globalStyle, color: 'darkmagenta'}}/>,
-	Cursed: <GiCursedStar style={{...globalStyle, color: 'ghostwhite'}}/>,
-	Draconid: <FaDragon style={{...globalStyle, color: 'gold'}}/>,
+	Beast: <GiFlatPawPrint style={{...globalStyle, color: 'rebeccapurple'}}/>,
+	Celestial: <GiAngelOutfit style={{...globalStyle, color: 'ivory'}}/>,
+	Cursed: <GiCursedStar style={{...globalStyle, color: 'lightslategray'}}/>,
+	Draconid: <FaDragon style={{...globalStyle, color: 'mediumslateblue'}}/>,
 	Elementa: <SiElement style={{...globalStyle, color: 'lightblue'}}/>,
-	Hybrid: <GiDoubleFaceMask style={{...globalStyle, color: 'yellow'}}/>,
+	Hybrid: <GiArchitectMask style={{...globalStyle, color: 'palegoldenrod'}}/>,
 	Insectoid: <GiMaggot style={{...globalStyle, color: 'yellowgreen'}}/>,
 	Necrophage: <GiTombstone style={{...globalStyle, color: 'gray'}}/>,
 	Ogroid: <GiMuscleUp style={{...globalStyle, color: 'orange'}}/>,
+	Plant: <PiPlantFill style={{...globalStyle, color: 'limegreen'}}/>,
 	Specter: <GiHood style={{...globalStyle, color: 'ghostwhite'}}/>,
 	Vampire: <GiBatwingEmblem style={{...globalStyle, color: 'crimson'}}/>,
 }
@@ -35,6 +38,7 @@ export default class Monstrology extends Plugin {
 		const trigger = TRIGGER_WORD
 		return [
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*beast\\s*$`, 'ig'), monsterType: 'Beast' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*celestial\\s*$`, 'ig'), monsterType: 'Celestial' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*cursed\\s*$`, 'ig'), monsterType: 'Cursed' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*draconid\\s*$`, 'ig'), monsterType: 'Draconid' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*elementa\\s*$`, 'ig'), monsterType: 'Elementa' },
@@ -42,6 +46,7 @@ export default class Monstrology extends Plugin {
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*insectoid\\s*$`, 'ig'), monsterType: 'Insectoid' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*necrophage\\s*$`, 'ig'), monsterType: 'Necrophage' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*ogroid\\s*$`, 'ig'), monsterType: 'Ogroid' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*plant\\s*$`, 'ig'), monsterType: 'Plant' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*specter\\s*$`, 'ig'), monsterType: 'Specter' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*vampire\\s*$`, 'ig'), monsterType: 'Vampire' },
 		]

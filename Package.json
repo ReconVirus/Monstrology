@@ -4,12 +4,12 @@
 	"description": "Visual flair that displays an icon or icon font next to a monster name based on its type.",
 	"main": "main.js",
 	"scripts": {
-		"dev": "node esbuild.config.mjs && sass --no-source-map src/Style.sass:dist/Style.css",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && sass --no-source-map src/Style.scss:dist/Style.css"
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
 	},
-	"keywords": [],
+	"keywords": ["Bestiary", "icons", "Monster"],
 	"author": "",
-	"license": "MIT",
+	"license": "WTFPL",
 	"devDependencies": {
 		"@codemirror/language": "https://github.com/lishid/cm-language",
 		"@types/node": "^16.11.6",
@@ -21,7 +21,6 @@
 		"dotenv": "^16.3.1",
 		"esbuild": "0.17.3",
 		"obsidian": "latest",
-		"sass": "^1.66.1",
 		"tslib": "2.4.0",
 		"typescript": "latest"
 	},
