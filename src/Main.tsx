@@ -4,7 +4,8 @@ import { MonstrologyLivePlugin } from './live-preview';
 import MonstrologySettingsTab, { MonstorlogySettings, DEFAULT_SETTINGS } from './Settings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {GiAngelOutfit, GiArchitectMask, GiBatwingEmblem, GiCursedStar, GiFlatPawPrint, GiHood, GiMaggot, GiMuscleUp, GiTombstone} from 'react-icons/gi'
+import {GiAlienStare, GiAngelOutfit, GiArchitectMask, GiBatwingEmblem, GiButterfly, GiCursedStar, 
+		GiDesertSkull, GiFlatPawPrint, GiHood, GiMaggot, GiMuscleUp,GiStoneTower, GiTombstone} from 'react-icons/gi'
 import {FaDragon} from 'react-icons/fa6';
 import {PiPlantFill} from 'react-icons/pi';
 import {SiElement} from 'react-icons/si';
@@ -16,11 +17,15 @@ const globalStyle = {verticalAlign: 'sub', fontSize: '1.5em'};
 
 export const MONSTER_ICONS: { 
 	[key: string]: JSX.Element } = {
+	Aberration: <GiAlienStare style={{...globalStyle, color: 'darkgray'}}/>,
 	Beast: <GiFlatPawPrint style={{...globalStyle, color: 'rebeccapurple'}}/>,
 	Celestial: <GiAngelOutfit style={{...globalStyle, color: 'ivory'}}/>,
+	Construct: <GiStoneTower style={{...globalStyle, color: 'lightgray'}}/>,
 	Cursed: <GiCursedStar style={{...globalStyle, color: 'lightslategray'}}/>,
 	Draconid: <FaDragon style={{...globalStyle, color: 'mediumslateblue'}}/>,
 	Elementa: <SiElement style={{...globalStyle, color: 'lightblue'}}/>,
+	Fairy: <GiButterfly style={{...globalStyle, color: 'orchid'}} />,
+	Fiend: <GiDesertSkull style={{...globalStyle, color: 'darkred'}}/>,
 	Hybrid: <GiArchitectMask style={{...globalStyle, color: 'palegoldenrod'}}/>,
 	Insectoid: <GiMaggot style={{...globalStyle, color: 'yellowgreen'}}/>,
 	Necrophage: <GiTombstone style={{...globalStyle, color: 'gray'}}/>,
@@ -37,11 +42,15 @@ export default class Monstrology extends Plugin {
 	monsterReplacements() {
 		const trigger = TRIGGER_WORD
 		return [
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*aberration\\s*$`, 'ig'), monsterType: 'Aberration' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*beast\\s*$`, 'ig'), monsterType: 'Beast' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*celestial\\s*$`, 'ig'), monsterType: 'Celestial' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*construct\\s*$`, 'ig'), monsterType: 'Construct' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*cursed\\s*$`, 'ig'), monsterType: 'Cursed' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*draconid\\s*$`, 'ig'), monsterType: 'Draconid' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*elementa\\s*$`, 'ig'), monsterType: 'Elementa' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*fairy\\s*$`, 'ig'), monsterType: 'Fairy' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*fiend\\s*$`, 'ig'), monsterType: 'Fiend' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*hybrid\\s*$`, 'ig'), monsterType: 'Hybrid' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*insectoid\\s*$`, 'ig'), monsterType: 'Insectoid' },
 			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*necrophage\\s*$`, 'ig'), monsterType: 'Necrophage' },

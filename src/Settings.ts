@@ -2,11 +2,15 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import Monstrology, { MON_CLASS } from "./Main";
 
 export interface MonstorlogySettings {
+    Aberration: string,
     Beast: string;
     Celestial: string;
+    Construct: string;
 	Cursed: string;
 	Draconid: string;
 	Elementa: string;
+    Fairy: string,
+    Fiend: string,
 	Hybrid: string;
 	Insectoid: string;
 	Necrophage: string;
@@ -17,11 +21,15 @@ export interface MonstorlogySettings {
 }
 
 export const DEFAULT_SETTINGS: MonstorlogySettings = {
+    Aberration: 'Aberration',
     Beast: 'Beast',
     Celestial: 'Celestial',
+    Construct: 'Construct',
 	Cursed: 'Cursed',
 	Draconid: 'Draconid',
 	Elementa: 'Elementa',
+    Fairy: 'Fairy',
+    Fiend: 'Fiend',
 	Hybrid: 'Hybrid',
 	Insectoid: 'Insectoid',
 	Necrophage: 'Necrophage',
