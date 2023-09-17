@@ -59,6 +59,20 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
+                    e.createSpan({text: 'Aberration', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Aberration)
+                .setValue(this.plugin.settings.Aberration)
+                .onChange(async (value) => {
+                    this.plugin.settings.Aberration = value || DEFAULT_SETTINGS.Aberration;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
                     e.createSpan({text: 'Beast', cls: MON_CLASS})
                 })
             )
@@ -70,7 +84,7 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings();
                 })
             )
-            new Setting(root)
+        new Setting(root)
             .setName(
                 createFragment(e => {
                     e.createSpan({text: 'Celestial', cls: MON_CLASS})
@@ -81,6 +95,20 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.Celestial)
                 .onChange(async (value) => {
                     this.plugin.settings.Celestial = value || DEFAULT_SETTINGS.Celestial;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Construct', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Construct)
+                .setValue(this.plugin.settings.Construct)
+                .onChange(async (value) => {
+                    this.plugin.settings.Construct = value || DEFAULT_SETTINGS.Construct;
                     await this.plugin.saveSettings();
                 })
             )
@@ -123,6 +151,34 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.Elementa)
                 .onChange(async (value) => {
                     this.plugin.settings.Elementa = value || DEFAULT_SETTINGS.Elementa;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Fairy', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Fairy)
+                .setValue(this.plugin.settings.Fairy)
+                .onChange(async (value) => {
+                    this.plugin.settings.Fairy = value || DEFAULT_SETTINGS.Fairy;
+                    await this.plugin.saveSettings();
+                })
+            )        
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    e.createSpan({text: 'Fiend', cls: MON_CLASS})
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_SETTINGS.Fiend)
+                .setValue(this.plugin.settings.Fiend)
+                .onChange(async (value) => {
+                    this.plugin.settings.Fiend = value || DEFAULT_SETTINGS.Fiend;
                     await this.plugin.saveSettings();
                 })
             )

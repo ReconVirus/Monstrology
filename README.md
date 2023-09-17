@@ -41,8 +41,8 @@ in your text, where Type is one of the supporting keys you want to display
 <!-- ROADMAP -->
 ## Roadmap
 - [x] Add Changelog
-- [ ] Add more monster types
-- [ ] Finish settings
+- [x] Add more monster types
+- [x] Finish settings
 - [ ] Make it more standardized with Dice Roller and Pf2-Actions
 - [ ] Additonal Features
   - [ ] Change the icon's color
