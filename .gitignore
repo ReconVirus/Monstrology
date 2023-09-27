@@ -1,4 +1,5 @@
 *.map
 .vscode
+idea
 node_modules
 main.js
