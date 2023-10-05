@@ -4,7 +4,7 @@ import { MonstrologyLivePlugin } from './live-preview';
 import MonstrologySettingsTab, { MonstorlogySettings, DEFAULT_SETTINGS } from './Settings';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { GiDeathSkull, GiLifeSupport, GiMoon, GiRingedPlanet, GiSandsOfTime, GiStoneSphere, GiSun, GiWaterSplash, GiWhirlwind } from 'react-icons/gi';
+import { GiDeathSkull, GiLifeSupport, GiMoon, GiStoneSphere, GiSun, GiWaterSplash, GiWhirlwind } from 'react-icons/gi';
 import {ImFire} from 'react-icons/im';
 import {BsFillLightningFill} from 'react-icons/bs';
 
