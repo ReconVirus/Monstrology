@@ -1,6 +1,28 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import Monstrology, { MON_CLASS } from "./Main";
 
+export interface ElementsSettings {
+	Air: string,
+	Dark: string,
+	Death: string,
+	Earth: string,
+	Fire: string,
+	Light: string,
+	Lightning: string,
+	Life: string,
+	Water: string,
+}
+export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
+	Air: "Air",
+	Dark: 'Dark',
+	Death: "Death",
+	Earth: "Earth",
+	Fire: "Fire",
+	Light: "Light",
+	Lightning: "Lightning",
+	Life: "Life",
+	Water: "Water"
+}
 export interface MonstorlogySettings {
     Aberration: string,
     Beast: string;
@@ -19,8 +41,7 @@ export interface MonstorlogySettings {
 	Specter: string;
 	Vampire: string;
 }
-
-export const DEFAULT_SETTINGS: MonstorlogySettings = {
+export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
     Aberration: 'Aberration',
     Beast: 'Beast',
     Celestial: 'Celestial',
@@ -37,6 +58,10 @@ export const DEFAULT_SETTINGS: MonstorlogySettings = {
     Plant: 'Plant',
 	Specter: 'Specter',
 	Vampire: 'Vampire'
+}
+export const DEFAULT_SETTINGS = {
+    ...DEFAULT_ELEMENT_SETTINGS,
+    ...DEFAULT_MONSTER_SETTINGS
 }
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
@@ -63,10 +88,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Aberration)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Aberration)
                 .setValue(this.plugin.settings.Aberration)
                 .onChange(async (value) => {
-                    this.plugin.settings.Aberration = value || DEFAULT_SETTINGS.Aberration;
+                    this.plugin.settings.Aberration = value || DEFAULT_MONSTER_SETTINGS.Aberration;
                     await this.plugin.saveSettings();
                 })
             )
@@ -77,10 +102,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Beast)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Beast)
                 .setValue(this.plugin.settings.Beast)
                 .onChange(async (value) => {
-                    this.plugin.settings.Beast = value || DEFAULT_SETTINGS.Beast;
+                    this.plugin.settings.Beast = value || DEFAULT_MONSTER_SETTINGS.Beast;
                     await this.plugin.saveSettings();
                 })
             )
@@ -91,10 +116,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Celestial)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Celestial)
                 .setValue(this.plugin.settings.Celestial)
                 .onChange(async (value) => {
-                    this.plugin.settings.Celestial = value || DEFAULT_SETTINGS.Celestial;
+                    this.plugin.settings.Celestial = value || DEFAULT_MONSTER_SETTINGS.Celestial;
                     await this.plugin.saveSettings();
                 })
             )
@@ -105,10 +130,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Construct)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Construct)
                 .setValue(this.plugin.settings.Construct)
                 .onChange(async (value) => {
-                    this.plugin.settings.Construct = value || DEFAULT_SETTINGS.Construct;
+                    this.plugin.settings.Construct = value || DEFAULT_MONSTER_SETTINGS.Construct;
                     await this.plugin.saveSettings();
                 })
             )
@@ -119,10 +144,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Cursed)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Cursed)
                 .setValue(this.plugin.settings.Cursed)
                 .onChange(async (value) => {
-                    this.plugin.settings.Cursed = value || DEFAULT_SETTINGS.Cursed;
+                    this.plugin.settings.Cursed = value || DEFAULT_MONSTER_SETTINGS.Cursed;
                     await this.plugin.saveSettings();
                 })
             )
@@ -133,10 +158,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Draconid)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Draconid)
                 .setValue(this.plugin.settings.Draconid)
                 .onChange(async (value) => {
-                    this.plugin.settings.Draconid = value || DEFAULT_SETTINGS.Draconid;
+                    this.plugin.settings.Draconid = value || DEFAULT_MONSTER_SETTINGS.Draconid;
                     await this.plugin.saveSettings();
                 })
             )
@@ -147,10 +172,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Elementa)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Elementa)
                 .setValue(this.plugin.settings.Elementa)
                 .onChange(async (value) => {
-                    this.plugin.settings.Elementa = value || DEFAULT_SETTINGS.Elementa;
+                    this.plugin.settings.Elementa = value || DEFAULT_MONSTER_SETTINGS.Elementa;
                     await this.plugin.saveSettings();
                 })
             )
@@ -161,10 +186,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Fairy)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Fairy)
                 .setValue(this.plugin.settings.Fairy)
                 .onChange(async (value) => {
-                    this.plugin.settings.Fairy = value || DEFAULT_SETTINGS.Fairy;
+                    this.plugin.settings.Fairy = value || DEFAULT_MONSTER_SETTINGS.Fairy;
                     await this.plugin.saveSettings();
                 })
             )        
@@ -175,10 +200,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Fiend)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Fiend)
                 .setValue(this.plugin.settings.Fiend)
                 .onChange(async (value) => {
-                    this.plugin.settings.Fiend = value || DEFAULT_SETTINGS.Fiend;
+                    this.plugin.settings.Fiend = value || DEFAULT_MONSTER_SETTINGS.Fiend;
                     await this.plugin.saveSettings();
                 })
             )
@@ -189,10 +214,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Hybrid)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Hybrid)
                 .setValue(this.plugin.settings.Hybrid)
                 .onChange(async (value) => {
-                    this.plugin.settings.Hybrid = value || DEFAULT_SETTINGS.Hybrid;
+                    this.plugin.settings.Hybrid = value || DEFAULT_MONSTER_SETTINGS.Hybrid;
                     await this.plugin.saveSettings();
                 })
             )
@@ -203,10 +228,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Insectoid)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Insectoid)
                 .setValue(this.plugin.settings.Insectoid)
                 .onChange(async (value) => {
-                    this.plugin.settings.Insectoid = value || DEFAULT_SETTINGS.Insectoid;
+                    this.plugin.settings.Insectoid = value || DEFAULT_MONSTER_SETTINGS.Insectoid;
                     await this.plugin.saveSettings();
                 })
             )
@@ -217,10 +242,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Necrophage)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Necrophage)
                 .setValue(this.plugin.settings.Necrophage)
                 .onChange(async (value) => {
-                    this.plugin.settings.Necrophage = value || DEFAULT_SETTINGS.Necrophage;
+                    this.plugin.settings.Necrophage = value || DEFAULT_MONSTER_SETTINGS.Necrophage;
                     await this.plugin.saveSettings();
                 })
             )
@@ -231,10 +256,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Ogroid)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Ogroid)
                 .setValue(this.plugin.settings.Ogroid)
                 .onChange(async (value) => {
-                    this.plugin.settings.Ogroid = value || DEFAULT_SETTINGS.Ogroid;
+                    this.plugin.settings.Ogroid = value || DEFAULT_MONSTER_SETTINGS.Ogroid;
                     await this.plugin.saveSettings();
                 })
             )
@@ -245,10 +270,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Plant)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Plant)
                 .setValue(this.plugin.settings.Plant)
                 .onChange(async (value) => {
-                    this.plugin.settings.Plant = value || DEFAULT_SETTINGS.Plant;
+                    this.plugin.settings.Plant = value || DEFAULT_MONSTER_SETTINGS.Plant;
                     await this.plugin.saveSettings();
                 })
             )
@@ -259,10 +284,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Specter)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Specter)
                 .setValue(this.plugin.settings.Specter)
                 .onChange(async (value) => {
-                    this.plugin.settings.Specter = value || DEFAULT_SETTINGS.Specter;
+                    this.plugin.settings.Specter = value || DEFAULT_MONSTER_SETTINGS.Specter;
                     await this.plugin.saveSettings();
                 })
             )
@@ -273,10 +298,10 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_SETTINGS.Vampire)
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Vampire)
                 .setValue(this.plugin.settings.Vampire)
                 .onChange(async (value) => {
-                    this.plugin.settings.Vampire = value || DEFAULT_SETTINGS.Vampire;
+                    this.plugin.settings.Vampire = value || DEFAULT_MONSTER_SETTINGS.Vampire;
                     await this.plugin.saveSettings();
                 })
             )

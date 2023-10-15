@@ -9,12 +9,27 @@ import {GiAlienStare, GiAngelOutfit, GiArchitectMask, GiBatwingEmblem, GiButterf
 import {FaDragon} from 'react-icons/fa6';
 import {PiPlantFill} from 'react-icons/pi';
 import {SiElement} from 'react-icons/si';
+import { GiDeathSkull, GiLifeSupport, GiMoon, GiStoneSphere, GiSun, GiWaterSplash, GiWhirlwind } from 'react-icons/gi';
+import {ImFire} from 'react-icons/im';
+import {BsFillLightningFill} from 'react-icons/bs';
 
+export const ELE_CLASS = 'ElementType'
 export const MON_CLASS = 'MonsterType'
-export const TRIGGER_WORD = 'mon'
+export const TRIGGER_WORD = 'ele' || 'mon'
 
 const globalStyle = {verticalAlign: 'sub', fontSize: '1.5em'};
-
+export const ELEMENT_ICONS: {
+	[key: string]: JSX.Element} = {
+	Air: <GiWhirlwind style={{...globalStyle, color:'white'}}/>,
+	Dark: <GiMoon style={{...globalStyle, color:'dimgray'}}/>,
+	Death: <GiDeathSkull style={{...globalStyle, color:'gainsboro'}}/>,
+	Earth: <GiStoneSphere style={{...globalStyle, color:'darkgoldenrod'}}/>,
+	Fire: <ImFire style={{...globalStyle, color:'red'}}/>,
+	Light: <GiSun style={{...globalStyle, color:'lightgoldenrodyellow'}}/>,
+	Lightning: <BsFillLightningFill style={{...globalStyle, color:'lightblue'}}/>,
+	Life: <GiLifeSupport style={{...globalStyle, color:'hotpink'}}/>,
+	Water: <GiWaterSplash style={{...globalStyle, color:'aqua'}}/>,
+}
 export const MONSTER_ICONS: { 
 	[key: string]: JSX.Element } = {
 	Aberration: <GiAlienStare style={{...globalStyle, color: 'darkgray'}}/>,
@@ -39,6 +54,20 @@ export default class Monstrology extends Plugin {
 	settings: MonstorlogySettings;
 	private editorExtensions: Extension[] = []
 
+	elementReplacements() {
+		const trigger = TRIGGER_WORD
+		return [
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*air\\s*$`, 'ig'), elementType: 'Air' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*dark\\s*$`, 'ig'), elementType: 'Dark' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*death\\s*$`, 'ig'), elementType: 'Death' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*earth\\s*$`, 'ig'), elementType: 'Earth' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*Fire\\s*$`, 'ig'), elementType: 'Fire' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*light\\s*$`, 'ig'), elementType: 'Light' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*lightning\\s*$`, 'ig'), elementType: 'Lightning' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*life\\s*$`, 'ig'), elementType: 'Life' },
+			{ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*water\\s*$`, 'ig'), elementType: 'Water' },
+		]
+	}
 	monsterReplacements() {
 		const trigger = TRIGGER_WORD
 		return [
@@ -85,21 +114,52 @@ export default class Monstrology extends Plugin {
 		if(!codes.length) {
 			return
 		}
-		const replacements = this.monsterReplacements()
+		const monsterReplacements = this.monsterReplacements()
+		const elementReplacements = this.elementReplacements()
 		codes.forEach(codeBlock => {
-			for (const replacement of replacements) {
-				if (codeBlock.innerText.match(replacement.regex)) {
-					const monsterType = codeBlock.innerText.split(':')[1].trim();
-					this.addChild(new MonsterMarkdownRenderChild(codeBlock, monsterType))
-					break
+			const original = codeBlock.innerText.trim();
+			const [trigger, type] = original.split(':');
+			if (trigger === 'mon') {
+				const replacement = monsterReplacements.find(r => r.monsterType.toLowerCase() === type.toLowerCase());
+				if (replacement) {
+					this.addChild(new MonsterMarkdownRenderChild(codeBlock, type))
+				}
+			} else if (trigger === 'ele') {
+				const replacement = elementReplacements.find(r => r.elementType.toLowerCase() === type.toLowerCase());
+				if (replacement) {
+					this.addChild(new ElementMarkdownRenderChild(codeBlock, type))
 				}
 			}
 		})
 	}
+	
 }
+export class markdownRenderChild extends MarkdownRenderChild {
+    constructor(element: HTMLElement, private type: string) {
+        super(element)
+    }
 
+    onload() : void {
+        const typeClass = this.type.toLowerCase();
+        const Type = this.containerEl.createSpan({cls: `${typeClass}`})
+        const icon = MONSTER_ICONS[this.type] || ELEMENT_ICONS[this.type]
+        ReactDOM.render(icon, Type);
+        this.containerEl.replaceWith(Type);
+    }
+}
+export class ElementMarkdownRenderChild extends MarkdownRenderChild {
+	constructor(element: HTMLElement, private elementType: string) {
+		super(element)
+	}
+
+	onload() : void {
+		const elementTypeClass = this.elementType.toLowerCase();
+		const Element = this.containerEl.createSpan({cls: `${ELE_CLASS} ${elementTypeClass}`})
+		ReactDOM.render(ELEMENT_ICONS[this.elementType], Element)
+		this.containerEl.replaceWith(Element);
+	}
+}
 class MonsterMarkdownRenderChild extends MarkdownRenderChild {
-
 	constructor(element: HTMLElement, private monsterType: string) {
 		super(element)
 	}
