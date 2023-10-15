@@ -34,7 +34,8 @@ For each monster type that you want to display, use the syntax
  `` 
 in your text, where Type is one of the supporting keys you want to display
 
-![image](https://github.com/ReconVirus/Monstrology/assets/43733760/908c2e70-affa-4ab2-84f4-82ad611b3b24)
+![image](https://github.com/ReconVirus/Monstrology/assets/43733760/cfce41b3-0192-4068-a62e-4b31f4756b73)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
