@@ -7,28 +7,31 @@ import * as ReactDOM from 'react-dom';
 
 class ElementWidget extends WidgetType {
     constructor(public elementType: string) { 
-        super() }
+        super() 
+    }
 
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
         span.classList.add(ELE_CLASS);
-        console.log('Rendering icon for element type:', ELEMENT_ICONS[this.elementType])
-        ReactDOM.render(ELEMENT_ICONS[this.elementType], span);
+        console.log('Rendering icon for element type:', ELEMENT_ICONS[this.elementType as keyof typeof ELEMENT_ICONS])
+        ReactDOM.render(ELEMENT_ICONS[this.elementType as keyof typeof ELEMENT_ICONS], span);
         return span;
     }
 }
 class MonstrologyWidget extends WidgetType {
     constructor(public monsterType: string) { 
-        super() }
+        super() 
+    }
 
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
         span.classList.add(MON_CLASS);
-        console.log('Rendering icon for monster type:', MONSTER_ICONS[this.monsterType])
-        ReactDOM.render(MONSTER_ICONS[this.monsterType], span);
+        console.log('Rendering icon for monster type:', MONSTER_ICONS[this.monsterType as keyof typeof MONSTER_ICONS])
+        ReactDOM.render(MONSTER_ICONS[this.monsterType as keyof typeof MONSTER_ICONS], span);
         return span;
     }
 }
+
 
 export function MonstrologyLivePlugin(plugin: Monstrology) {
     return ViewPlugin.fromClass(
@@ -71,7 +74,7 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                             for (const replacement of replacements) {
                                 if (original.match(replacement.regex)) {
                                     const type = original.split(':')[1].trim();
-                                    if (MONSTER_ICONS[type]) {
+                                    if (MONSTER_ICONS[type as keyof typeof MONSTER_ICONS]) {
                                         builder.add(
                                             node.from-1,
                                             node.to+1,
@@ -81,7 +84,7 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                                                 block: false
                                             })
                                         )
-                                }else if (ELEMENT_ICONS[type]) {
+                                }else if (ELEMENT_ICONS[type as keyof typeof ELEMENT_ICONS]) {
                                     builder.add(
                                         node.from-1,
                                         node.to+1,

@@ -1,17 +1,7 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import Monstrology, { MON_CLASS } from "./Main";
 
-export interface ElementsSettings {
-	Air: string,
-	Dark: string,
-	Death: string,
-	Earth: string,
-	Fire: string,
-	Light: string,
-	Lightning: string,
-	Life: string,
-	Water: string,
-}
+
 export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
 	Air: "Air",
 	Dark: 'Dark',
@@ -22,24 +12,6 @@ export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
 	Lightning: "Lightning",
 	Life: "Life",
 	Water: "Water"
-}
-export interface MonstorlogySettings {
-    Aberration: string,
-    Beast: string;
-    Celestial: string;
-    Construct: string;
-	Cursed: string;
-	Draconid: string;
-	Elementa: string;
-    Fairy: string,
-    Fiend: string,
-	Hybrid: string;
-	Insectoid: string;
-	Necrophage: string;
-	Ogroid: string;
-    Plant: string;
-	Specter: string;
-	Vampire: string;
 }
 export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
     Aberration: 'Aberration',
@@ -62,6 +34,35 @@ export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
 export const DEFAULT_SETTINGS = {
     ...DEFAULT_ELEMENT_SETTINGS,
     ...DEFAULT_MONSTER_SETTINGS
+}
+export interface ElementsSettings {
+	Air: string,
+	Dark: string,
+	Death: string,
+	Earth: string,
+	Fire: string,
+	Light: string,
+	Lightning: string,
+	Life: string,
+	Water: string,
+}
+export interface MonstorlogySettings {
+    Aberration: string,
+    Beast: string;
+    Celestial: string;
+    Construct: string;
+	Cursed: string;
+	Draconid: string;
+	Elementa: string;
+    Fairy: string,
+    Fiend: string,
+	Hybrid: string;
+	Insectoid: string;
+	Necrophage: string;
+	Ogroid: string;
+    Plant: string;
+	Specter: string;
+	Vampire: string;
 }
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
