@@ -1,9 +1,23 @@
-import Monstrology, { ELEMENT_ICONS, ELE_CLASS, MONSTER_ICONS, MON_CLASS } from "./Main"
+import Monstrology, { ALIGNMENT, ALI_CLASS, ELEMENT, ELE_CLASS, MONSTER, MON_CLASS } from "./Main"
 import { PluginValue, EditorView, ViewPlugin, ViewUpdate, WidgetType, Decoration, DecorationSet } from "@codemirror/view"
 import { RangeSetBuilder } from '@codemirror/state';
 import { syntaxTree } from "@codemirror/language";
 import { editorLivePreviewField } from "obsidian";
 import * as ReactDOM from 'react-dom';
+
+class AlignmentWidget extends WidgetType {
+    constructor(public alignmentType: string) {
+        super()
+    }
+
+    toDOM(view: EditorView): HTMLElement {
+        const span = document.createElement('span')
+        span.classList.add(ALI_CLASS);
+        console.log('Rendering icon for alignment type:', ALIGNMENT[this.alignmentType as keyof typeof ALIGNMENT]?.icon)
+        ReactDOM.render(ALIGNMENT[this.alignmentType as keyof typeof ALIGNMENT].icon, span);
+        return span;
+    }
+}
 
 class ElementWidget extends WidgetType {
     constructor(public elementType: string) { 
@@ -13,11 +27,12 @@ class ElementWidget extends WidgetType {
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
         span.classList.add(ELE_CLASS);
-        console.log('Rendering icon for element type:', ELEMENT_ICONS[this.elementType as keyof typeof ELEMENT_ICONS])
-        ReactDOM.render(ELEMENT_ICONS[this.elementType as keyof typeof ELEMENT_ICONS], span);
+        console.log('Rendering icon for element type:', ELEMENT[this.elementType as keyof typeof ELEMENT]?.icon)
+        ReactDOM.render(ELEMENT[this.elementType as keyof typeof ELEMENT].icon, span);
         return span;
     }
 }
+
 class MonstrologyWidget extends WidgetType {
     constructor(public monsterType: string) { 
         super() 
@@ -26,8 +41,8 @@ class MonstrologyWidget extends WidgetType {
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
         span.classList.add(MON_CLASS);
-        console.log('Rendering icon for monster type:', MONSTER_ICONS[this.monsterType as keyof typeof MONSTER_ICONS])
-        ReactDOM.render(MONSTER_ICONS[this.monsterType as keyof typeof MONSTER_ICONS], span);
+        console.log('Rendering icon for monster type:', MONSTER[this.monsterType as keyof typeof MONSTER]?.icon)
+        ReactDOM.render(MONSTER[this.monsterType as keyof typeof MONSTER].icon, span);
         return span;
     }
 }
@@ -43,7 +58,9 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
             }
 
             update(update: ViewUpdate): void {
-                this.decorations = this.buildDecorations(update.view)
+                if (update.docChanged || update.selectionSet || update.viewportChanged) {
+                    this.decorations = this.buildDecorations(update.view)
+                }
             }
 
             private buildDecorations(view: EditorView) {
@@ -51,13 +68,13 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                 if (!view.state.field(editorLivePreviewField)) {
                     return Decoration.none
                 }
-
+            
                 // Build the decorations
                 const builder = new RangeSetBuilder<Decoration>();
-
+            
                 // List the replacements to be used
-                const replacements = [...plugin.monsterReplacements(), ...plugin.elementReplacements()]
-
+                const replacements = [...plugin.monsterReplacements(), ...plugin.elementReplacements(), ...plugin.alignmentReplacements()]
+            
                 for (const {from, to} of view.visibleRanges) {
                     syntaxTree(view.state).iterate({
                         from,
@@ -65,16 +82,16 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                         enter: ({ node }) => {
                             if (!node.type.name.contains('inline-code')) return
                             if (node.type.name.includes('formatting')) return
-
+            
                             for (const range of view.state.selection.ranges) {
                                 if (range.from <= node.to+1 && range.to >= node.from-1) return
                             }
-
+            
                             const original = view.state.doc.sliceString(node.from, node.to)
                             for (const replacement of replacements) {
                                 if (original.match(replacement.regex)) {
                                     const type = original.split(':')[1].trim();
-                                    if (MONSTER_ICONS[type as keyof typeof MONSTER_ICONS]) {
+                                    if (MONSTER[type as keyof typeof MONSTER]?.icon) {
                                         builder.add(
                                             node.from-1,
                                             node.to+1,
@@ -84,20 +101,31 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                                                 block: false
                                             })
                                         )
-                                }else if (ELEMENT_ICONS[type as keyof typeof ELEMENT_ICONS]) {
-                                    builder.add(
-                                        node.from-1,
-                                        node.to+1,
-                                        Decoration.replace({
-                                            widget: new ElementWidget(type),
-                                            inclusive: false,
-                                            block: false
-                                        })
-                                    )
+                                    } else if (ELEMENT[type as keyof typeof ELEMENT]?.icon) {
+                                        builder.add(
+                                            node.from-1,
+                                            node.to+1,
+                                            Decoration.replace({
+                                                widget: new ElementWidget(type),
+                                                inclusive: false,
+                                                block: false
+                                            })
+                                        )
+                                    } else if (ALIGNMENT[type as keyof typeof ALIGNMENT]?.icon) {
+                                        builder.add(
+                                            node.from-1,
+                                            node.to+1,
+                                            Decoration.replace({
+                                                widget: new AlignmentWidget(type),
+                                                inclusive: false,
+                                                block: false
+                                            })
+                                        )
+                                    }
                                 }
                             }
                         }}
-                    })
+                    )
                 }
                 return builder.finish()
             }

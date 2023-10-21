@@ -2,6 +2,17 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import Monstrology, { MON_CLASS } from "./Main";
 
 
+export const DEFAULT_ALIGNNMENT_SETTINGS: AlignmentSettings = {
+	LG: 'Lawful Good',
+	NG: 'Neutral Good',
+	CG: 'Chaotic Good',
+	LN: 'Lawful Neutral',
+	TN: 'True Neutral',
+	CN: 'Chaotic Neutral',
+	LE: 'Lawful Evil',
+	NE: 'Neutral Evil',
+	CE: 'Chaotic Evil',
+}
 export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
 	Air: "Air",
 	Dark: 'Dark',
@@ -32,8 +43,20 @@ export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
 	Vampire: 'Vampire'
 }
 export const DEFAULT_SETTINGS = {
+    ...DEFAULT_ALIGNNMENT_SETTINGS,
     ...DEFAULT_ELEMENT_SETTINGS,
     ...DEFAULT_MONSTER_SETTINGS
+}
+export interface AlignmentSettings{
+    LG: string,
+    NG: string,
+    CG: string,
+    LN: string,
+    TN: string,
+    CN: string,
+    LE: string,
+    NE: string,
+    CE: string,
 }
 export interface ElementsSettings {
 	Air: string,

@@ -8,123 +8,110 @@ import { BsFillLightningFill } from "react-icons/bs";
 import {
 	GiAlienStare,
 	GiAngelOutfit,
+	GiAngelWings,
 	GiArchitectMask,
 	GiBatwingEmblem,
+	GiBrute,
 	GiButterfly,
+	GiCrownedSkull,
 	GiCursedStar,
 	GiDeathSkull,
 	GiDesertSkull,
+	GiFist,
 	GiFlatPawPrint,
 	GiHood,
+	GiImpLaugh,
 	GiLifeSupport,
 	GiMaggot,
 	GiMoon,
 	GiMuscleUp,
 	GiPoisonBottle,
+	GiScales,
 	GiSlime,
 	GiStoneSphere,
 	GiStoneTower,
 	GiSun,
 	GiTombstone,
+	GiTwoFeathers,
 	GiWaterSplash,
 	GiWhirlwind,
 } from "react-icons/gi";
-import { FaDragon, FaRegSnowflake } from "react-icons/fa6";
+import { FaDragon, FaHandHoldingHeart, FaRegCircle, FaRegSnowflake } from "react-icons/fa6";
 import { ImFire } from "react-icons/im";
 import { PiPlantFill } from "react-icons/pi";
 import { SiElement } from "react-icons/si";
 
-export const ELE_CLASS = 'ElementType'
-export const MON_CLASS = 'MonsterType'
-export let TRIGGER_WORD = 'ele' || 'mon'
+export const ALI_CLASS = "AlignmentType";
+export const ELE_CLASS = "ElementType";
+export const MON_CLASS = "MonsterType";
+export const TRIGGER_WORD = ["ali", "ele", "mon"];
 
-enum ElementType {
-    Air = 'Air',
-    Dark = 'Dark',
-    Death = 'Death',
-    Earth = 'Earth',
-    Fire = 'Fire',
-	Ice = "Ice",
-    Light = 'Light',
-    Lightning = 'Lightning',
-    Life = 'Life',
-	Poison = 'Poison',
-    Water = 'Water'
-}
+const globalStyle = { verticalAlign: "sub", fontSize: "1.5em" };
+const generateIcon = (IconComponent: React.ElementType, color: string) => (
+	<IconComponent style={{ ...globalStyle, color }} />
+);
 
-enum MonsterType {
-    Aberration = 'Aberration',
-    Beast = 'Beast',
-    Celestial = 'Celestial',
-    Construct = 'Construct',
-    Cursed = 'Cursed',
-    Draconid = 'Draconid',
-    Elementa = 'Elementa',
-    Fairy = 'Fairy',
-    Fiend = 'Fiend',
-	Hybrid = 'Hybrid',
-	Insectoid = 'Insectoid',
-	Necrophage = 'Necrophage',
-	Ogroid = 'Ogroid',
-	Ooze = 'Ooze',
-    Plant = 'Plant',
-	Specter = 'Specter',
-	Vampire = 'Vampire'
-}
-
-
-const globalStyle = {verticalAlign: 'sub', fontSize: '1.5em'};
-const generateIcon = (IconComponent: React.ElementType, color: string) => <IconComponent style={{...globalStyle, color}}/>;
-
-export const ELEMENT_ICONS = {
-	Air: generateIcon(GiWhirlwind, 'white'),
-	Dark: generateIcon(GiMoon, 'dimgray'),
-	Death: generateIcon(GiDeathSkull, 'gainsboro'),
-	Earth: generateIcon(GiStoneSphere, 'darkgoldenrod'),
-	Fire: generateIcon(ImFire, 'red'),
-	Ice: generateIcon(FaRegSnowflake, 'lightcyan'),
-	Light: generateIcon(GiSun, 'lightgoldenrodyellow'),
-	Lightning: generateIcon(BsFillLightningFill, 'lightblue'),
-	Life: generateIcon(GiLifeSupport, 'hotpink'),
-	Poison: generateIcon(GiPoisonBottle, 'lawngreen'),
-	Water: generateIcon(GiWaterSplash, 'aqua'),
+export const ALIGNMENT = {
+	LG: { value: "LG", icon: generateIcon(GiAngelWings, "lightgoldenrodyellow")},
+	NG: { value: "NG", icon: generateIcon(FaHandHoldingHeart, "pink")},
+	CG: { value: "CG", icon: generateIcon(GiFist, "dodgerblue")},
+	LN: { value: "LN", icon: generateIcon(GiScales, "goldenrod")},
+	TN: { value: "TN", icon: generateIcon(FaRegCircle, "white")},
+	CN: { value: "CN", icon: generateIcon(GiTwoFeathers, "mediumseagreen")},
+	LE: { value: "LE", icon: generateIcon(GiCrownedSkull, "orangered")},
+	NE: { value: "NE", icon: generateIcon(GiImpLaugh, "red")},
+	CE: { value: "CE", icon: generateIcon(GiBrute, "rebeccapurple")},
 };
-export const MONSTER_ICONS = {
-	Aberration: generateIcon(GiAlienStare, 'darkgray'),
-	Beast: generateIcon(GiFlatPawPrint, 'rebeccapurple'),
-	Celestial: generateIcon(GiAngelOutfit, 'ivory'),
-	Construct: generateIcon(GiStoneTower, 'lightgray'),
-	Cursed: generateIcon(GiCursedStar, 'lightslategray'),
-	Draconid: generateIcon(FaDragon, 'mediumslateblue'),
-	Elementa: generateIcon(SiElement, 'lightblue'),
-	Fairy: generateIcon(GiButterfly, 'orchid'),
-	Fiend: generateIcon(GiDesertSkull, 'darkred'),
-	Hybrid: generateIcon(GiArchitectMask, 'palegoldenrod'),
-	Insectoid: generateIcon(GiMaggot, 'yellowgreen'),
-	Necrophage: generateIcon(GiTombstone, 'gray'),
-	Ogroid: generateIcon(GiMuscleUp, 'orange'),
-	Ooze: generateIcon(GiSlime, 'white'),
-	Plant: generateIcon(PiPlantFill, 'limegreen'),
-	Specter: generateIcon(GiHood, 'ghostwhite'),
-	Vampire: generateIcon(GiBatwingEmblem, 'crimson'),
+export const ELEMENT = {
+	Air: { value: "Air", icon: generateIcon(GiWhirlwind, "white")},
+	Dark: { value: "Dark", icon: generateIcon(GiMoon, "dimgray")},
+	Death: { value: "Death", icon: generateIcon(GiDeathSkull, "gainsboro")},
+	Earth: { value: "Earth", icon: generateIcon(GiStoneSphere, "darkgoldenrod")},
+	Fire: { value: "Fire", icon: generateIcon(ImFire, "red")},
+	Ice: { value: "Ice", icon: generateIcon(FaRegSnowflake, "lightcyan")},
+	Light: { value: "Light", icon: generateIcon(GiSun, "lightgoldenrodyellow")},
+	Lightning: { value: "Lightning", icon: generateIcon(BsFillLightningFill, "lightblue")},
+	Life: { value: "Life", icon: generateIcon(GiLifeSupport, "hotpink")},
+	Poison: { value: "Poison", icon: generateIcon(GiPoisonBottle, "lawngreen")},
+	Water: { value: "Water", icon: generateIcon(GiWaterSplash, "aqua")},
+};
+export const MONSTER = {
+	Aberration: { value: "Aberration", icon: generateIcon(GiAlienStare, "darkgray")},
+	Beast: { value: "Beast", icon: generateIcon(GiFlatPawPrint, "rebeccapurple")},
+	Celestial: { value: "Celestial", icon: generateIcon(GiAngelOutfit, "ivory") },
+	Construct: { value: "Construct", icon: generateIcon(GiStoneTower, "lightgray")},
+	Cursed: { value: "Cursed", icon: generateIcon(GiCursedStar, "lightslategray")},
+	Draconid: { value: "Draconid", icon: generateIcon(FaDragon, "mediumslateblue")},
+	Elementa: { value: "Elementa", icon: generateIcon(SiElement, "lightblue")},
+	Fairy: { value: "Fairy", icon: generateIcon(GiButterfly, "orchid")},
+	Fiend: { value: "Fiend", icon: generateIcon(GiDesertSkull, "darkred")},
+	Hybrid: { value: "Hybrid", icon: generateIcon(GiArchitectMask, "palegoldenrod")},
+	Insectoid: {value: "Insectoid", icon: generateIcon(GiMaggot, "yellowgreen")},
+	Necrophage: { value: "Necrophage", icon: generateIcon(GiTombstone, "gray")},
+	Ogroid: { value: "Ogroid", icon: generateIcon(GiMuscleUp, "orange")},
+	Ooze: { value: "Ooze", icon: generateIcon(GiSlime, "lightskyblue")},
+	Plant: { value: "Plant", icon: generateIcon(PiPlantFill, "limegreen")},
+	Specter: { value: "Specter", icon: generateIcon(GiHood, "ghostwhite")},
+	Vampire: { value: "Vampire", icon: generateIcon(GiBatwingEmblem, "crimson")},
 };
 
 export default class Monstrology extends Plugin {
 	settings: MonstorlogySettings;
 	private editorExtensions: Extension[] = []
 
-	createReplacements(trigger: string, types: string[]) {
-		return types.map(type => ({ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*${type.toLowerCase()}\\s*$`, 'ig'), type }));
+	createReplacements(trigger: string, types: Record<string, {value: string, icon: JSX.Element}>) {
+		return Object.values(types).map(type => ({ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i'), type: type.value }));
 	}
-	
+	alignmentReplacements() {
+		return this.createReplacements('ali', ALIGNMENT);
+	}
 	elementReplacements() {
-		return this.createReplacements('ele', Object.values(ElementType));
+		return this.createReplacements('ele', ELEMENT);
 	}
-	
 	monsterReplacements() {
-		return this.createReplacements('mon', Object.values(MonsterType));
+		return this.createReplacements('mon', MONSTER);
 	}
-	
+
 	async onload() {
 		await this.loadSettings()
 		this.addSettingTab(new MonstrologySettingsTab(this.app, this))
@@ -150,6 +137,7 @@ export default class Monstrology extends Plugin {
 		if(!codes.length) {
 			return
 		}
+		const alignmentReplacements = this.alignmentReplacements()
 		const monsterReplacements = this.monsterReplacements()
 		const elementReplacements = this.elementReplacements()
 		codes.forEach(codeBlock => {
@@ -160,49 +148,50 @@ export default class Monstrology extends Plugin {
 				if (replacement) {
 					this.addChild(new MonsterMarkdownRenderChild(codeBlock, type))
 				}
-			} else if (trigger === 'ele') {
+			}
+			if (trigger === 'ele') {
 				const replacement = elementReplacements.find(r => r.type.toLowerCase() === type.toLowerCase());
 				if (replacement) {
 					this.addChild(new ElementMarkdownRenderChild(codeBlock, type))
 				}
+			} 
+			if (trigger === 'ali') {
+				const replacement = alignmentReplacements.find(r => r.type === type);
+				if (replacement) (
+					this.addChild(new AlignmentMarkdownRenderChild(codeBlock, type))
+				)
 			}
 		})
 	}
 }
-export class markdownRenderChild extends MarkdownRenderChild {
-    constructor(element: HTMLElement, private type: string) {
+class BaseMarkdownRenderChild extends MarkdownRenderChild {
+    constructor(element: HTMLElement, private type: string, private iconType: Record<string, {value: string, icon: JSX.Element}>) {
         super(element)
     }
 
     onload() : void {
         const typeClass = this.type.toLowerCase();
         const Type = this.containerEl.createSpan({cls: `${typeClass}`})
-        const icon = MONSTER_ICONS[this.type as keyof typeof MONSTER_ICONS] || ELEMENT_ICONS[this.type as keyof typeof ELEMENT_ICONS]
+        const icon = this.iconType[this.type as keyof typeof this.iconType]?.icon;
         ReactDOM.render(icon, Type);
         this.containerEl.replaceWith(Type);
     }
 }
-export class ElementMarkdownRenderChild extends MarkdownRenderChild {
-	constructor(element: HTMLElement, private elementType: string) {
-		super(element)
-	}
 
-	onload() : void {
-		const elementTypeClass = this.elementType.toLowerCase();
-		const Element = this.containerEl.createSpan({cls: `${ELE_CLASS} ${elementTypeClass}`})
-		ReactDOM.render(ELEMENT_ICONS[this.elementType as keyof typeof ELEMENT_ICONS], Element)
-		this.containerEl.replaceWith(Element);
-	}
+class AlignmentMarkdownRenderChild extends BaseMarkdownRenderChild {
+    constructor(element: HTMLElement, alignmentType: string) {
+        super(element, alignmentType, ALIGNMENT);
+    }
 }
-class MonsterMarkdownRenderChild extends MarkdownRenderChild {
-	constructor(element: HTMLElement, private monsterType: string) {
-		super(element)
-	}
 
-	onload() : void {
-		const monsterTypeClass = this.monsterType.toLowerCase();
-		const Monster = this.containerEl.createSpan({cls: `${MON_CLASS} ${monsterTypeClass}`})
-		ReactDOM.render(MONSTER_ICONS[this.monsterType as keyof typeof MONSTER_ICONS], Monster);
-		this.containerEl.replaceWith(Monster);
-	}
+class ElementMarkdownRenderChild extends BaseMarkdownRenderChild {
+    constructor(element: HTMLElement, elementType: string) {
+        super(element, elementType, ELEMENT);
+    }
+}
+
+class MonsterMarkdownRenderChild extends BaseMarkdownRenderChild {
+    constructor(element: HTMLElement, monsterType: string) {
+        super(element, monsterType, MONSTER);
+    }
 }
