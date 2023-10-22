@@ -37,8 +37,7 @@ in your text, where Key is either `ali`, `ele`, or `mon`. Type is one of the sup
 ### Suggestion
 on a new line entering ` follow by a letter will show a list of icons for that give letter.
 
-![image](https://github.com/ReconVirus/Monstrology/assets/43733760/cfce41b3-0192-4068-a62e-4b31f4756b73)
-
+![image](https://github.com/ReconVirus/Monstrology/assets/43733760/b1faf6bb-5b43-4c6c-8fdf-23237ebc3938)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
