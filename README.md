@@ -28,11 +28,14 @@ Monstrology is a project that aims to add some visual flair to the names of mons
 
 <!-- USAGE -->
 ## Usage
-For each monster type that you want to display, use the syntax 
+For each alignment, element, or monster type that you want to display, use the syntax 
 ``
-`mon:Type`
- `` 
-in your text, where Type is one of the supporting keys you want to display
+`Key:Type`
+`` 
+in your text, where Key is either `ali`, `ele`, or `mon`. Type is one of the supporting words you want to display
+
+### Suggestion
+on a new line entering ` follow by a letter will show a list of icons for that give letter.
 
 ![image](https://github.com/ReconVirus/Monstrology/assets/43733760/cfce41b3-0192-4068-a62e-4b31f4756b73)
 
@@ -44,13 +47,13 @@ in your text, where Type is one of the supporting keys you want to display
 - [x] Add Changelog
 - [x] Add more monster types
 - [x] Add element Support
- - [ ] sub elements (posion, etc)
+  - [ ] sub elements (posion, etc)
 - [x] Finish settings
 - [x] Make it more standardized with Dice Roller and Pf2-Actions
 - [ ] Additonal Features
   - [ ] Change the icon's color
   - [ ] Change the icon's size
-  - [ ] Change Tigger Word
+  - [x] Suggest icons
   - [ ] Support icon-linking 
 
 See the [open issues]() for a full list of proposed features (and known issues).
