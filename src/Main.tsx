@@ -40,6 +40,7 @@ import { FaDragon, FaHandHoldingHeart, FaRegCircle, FaRegSnowflake } from "react
 import { ImFire } from "react-icons/im";
 import { PiPlantFill } from "react-icons/pi";
 import { SiElement } from "react-icons/si";
+import SuggestionIcon from "./SuggestModel";
 
 export const ALI_CLASS = "AlignmentType";
 export const ELE_CLASS = "ElementType";
@@ -51,7 +52,11 @@ const generateIcon = (IconComponent: React.ElementType, color: string) => (
 	<IconComponent style={{ ...globalStyle, color }} />
 );
 
-export const ALIGNMENT = {
+type IconType = {
+	[key: string]: { value: string; icon: JSX.Element };
+};
+
+export const ALIGNMENT:IconType = {
 	LG: { value: "LG", icon: generateIcon(GiAngelWings, "lightgoldenrodyellow")},
 	NG: { value: "NG", icon: generateIcon(FaHandHoldingHeart, "pink")},
 	CG: { value: "CG", icon: generateIcon(GiFist, "dodgerblue")},
@@ -62,7 +67,7 @@ export const ALIGNMENT = {
 	NE: { value: "NE", icon: generateIcon(GiImpLaugh, "red")},
 	CE: { value: "CE", icon: generateIcon(GiBrute, "rebeccapurple")},
 };
-export const ELEMENT = {
+export const ELEMENT:IconType = {
 	Air: { value: "Air", icon: generateIcon(GiWhirlwind, "white")},
 	Dark: { value: "Dark", icon: generateIcon(GiMoon, "dimgray")},
 	Death: { value: "Death", icon: generateIcon(GiDeathSkull, "gainsboro")},
@@ -75,7 +80,7 @@ export const ELEMENT = {
 	Poison: { value: "Poison", icon: generateIcon(GiPoisonBottle, "lawngreen")},
 	Water: { value: "Water", icon: generateIcon(GiWaterSplash, "aqua")},
 };
-export const MONSTER = {
+export const MONSTER:IconType = {
 	Aberration: { value: "Aberration", icon: generateIcon(GiAlienStare, "darkgray")},
 	Beast: { value: "Beast", icon: generateIcon(GiFlatPawPrint, "rebeccapurple")},
 	Celestial: { value: "Celestial", icon: generateIcon(GiAngelOutfit, "ivory") },
@@ -117,6 +122,7 @@ export default class Monstrology extends Plugin {
 		this.addSettingTab(new MonstrologySettingsTab(this.app, this))
 		this.registerMarkdownPostProcessor(this.markdownPostProcessor.bind(this))
 		this.registerEditorExtension(this.editorExtensions)
+        this.registerEditorSuggest(new SuggestionIcon(this.app));
 		this.updateExtension()
 		console.log("Monstrology loaded");
 	}
