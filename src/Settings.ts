@@ -1,5 +1,5 @@
-import { App, PluginSettingTab, Setting } from "obsidian";
-import Monstrology, { ALIGNMENT, ALI_CLASS, MONSTER, MON_CLASS } from "./Main";
+import { App, Notice, PluginSettingTab, Setting } from "obsidian";
+import Monstrology, { ALIGNMENT, ALI_CLASS, ELEMENT, ELE_CLASS, MONSTER, MON_CLASS } from "./Main";
 import * as ReactDOM from "react-dom";
 
 export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
@@ -13,7 +13,7 @@ export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
 	NE: 'Neutral Evil',
 	CE: 'Chaotic Evil',
 }
-export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
+export const DEFAULT_ELEMENT_SETTINGS: ElementSettings = {
 	Air: "Air",
 	Dark: 'Dark',
 	Death: "Death",
@@ -26,7 +26,7 @@ export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
     Poison: "Poison",
 	Water: "Water"
 }
-export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
+export const DEFAULT_MONSTER_SETTINGS: MonsterSettings = {
     Aberration: 'Aberration',
     Beast: 'Beast',
     Celestial: 'Celestial',
@@ -62,7 +62,7 @@ export interface AlignmentSettings{
     NE: string,
     CE: string,
 }
-export interface ElementsSettings {
+export interface ElementSettings {
     [key: string]: string,
 	Air: string,
 	Dark: string,
@@ -76,7 +76,7 @@ export interface ElementsSettings {
     Poison: string,
 	Water: string,
 }
-export interface MonstorlogySettings {
+export interface MonsterSettings {
     [key: string]: string,
     Aberration: string,
     Beast: string;
@@ -125,7 +125,49 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 })
             )
     }
-    
+
+    createElementSetting(root: HTMLElement, elementKey: keyof ElementSettings) {
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(ELEMENT[elementKey].icon, flexContainer);
+                    const spanElement = e.createSpan({text: ELEMENT[elementKey].value, cls: ELE_CLASS});
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_ELEMENT_SETTINGS[elementKey])
+                .setValue(this.plugin.settings[elementKey])
+                .onChange(async (value) => {
+                    this.plugin.settings[elementKey] = value || DEFAULT_ELEMENT_SETTINGS[elementKey];
+                    await this.plugin.saveSettings();
+                })
+            )
+    }
+
+    createMonsterSetting(root: HTMLElement, monsterKey: keyof MonsterSettings) {
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER[monsterKey].icon, flexContainer);
+                    const spanElement = e.createSpan({text: MONSTER[monsterKey].value, cls: MON_CLASS});
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS[monsterKey])
+                .setValue(this.plugin.settings[monsterKey])
+                .onChange(async (value) => {
+                    this.plugin.settings[monsterKey] = value || DEFAULT_MONSTER_SETTINGS[monsterKey];
+                    await this.plugin.saveSettings();
+                })
+            )
+    }
+
     display(): void {
         const {containerEl: root} = this;
         root.empty()
@@ -141,315 +183,44 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
 
         new Setting(root)
             .setHeading()
+            .setName('Element Types')
+            .setDesc('The text used to identify each element type.')
+
+            Object.keys(ELEMENT).forEach(elementKey => {
+                this.createElementSetting(root, elementKey as keyof ElementSettings)
+            });
+
+        new Setting(root)
+            .setHeading()
             .setName('Monster Types')
             .setDesc('The text used to identify each monster type.')
 
+            Object.keys(MONSTER).forEach(monsterKey => {
+                this.createMonsterSetting(root, monsterKey as keyof MonsterSettings)
+            });
+
         new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Aberration.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Aberration', cls: MON_CLASS});
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Aberration)
-                .setValue(this.plugin.settings.Aberration)
-                .onChange(async (value) => {
-                    this.plugin.settings.Aberration = value || DEFAULT_MONSTER_SETTINGS.Aberration;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Beast.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Beast', cls: MON_CLASS});
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Beast)
-                .setValue(this.plugin.settings.Beast)
-                .onChange(async (value) => {
-                    this.plugin.settings.Beast = value || DEFAULT_MONSTER_SETTINGS.Beast;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Celestial.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Celestial', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Celestial)
-                .setValue(this.plugin.settings.Celestial)
-                .onChange(async (value) => {
-                    this.plugin.settings.Celestial = value || DEFAULT_MONSTER_SETTINGS.Celestial;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Construct.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Construct', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Construct)
-                .setValue(this.plugin.settings.Construct)
-                .onChange(async (value) => {
-                    this.plugin.settings.Construct = value || DEFAULT_MONSTER_SETTINGS.Construct;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Cursed.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Cursed', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Cursed)
-                .setValue(this.plugin.settings.Cursed)
-                .onChange(async (value) => {
-                    this.plugin.settings.Cursed = value || DEFAULT_MONSTER_SETTINGS.Cursed;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Draconid.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Draconid', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Draconid)
-                .setValue(this.plugin.settings.Draconid)
-                .onChange(async (value) => {
-                    this.plugin.settings.Draconid = value || DEFAULT_MONSTER_SETTINGS.Draconid;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Elementa.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Elementa', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Elementa)
-                .setValue(this.plugin.settings.Elementa)
-                .onChange(async (value) => {
-                    this.plugin.settings.Elementa = value || DEFAULT_MONSTER_SETTINGS.Elementa;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Fairy.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Fairy', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Fairy)
-                .setValue(this.plugin.settings.Fairy)
-                .onChange(async (value) => {
-                    this.plugin.settings.Fairy = value || DEFAULT_MONSTER_SETTINGS.Fairy;
-                    await this.plugin.saveSettings();
-                })
-            )        
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Fiend.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Fiend', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Fiend)
-                .setValue(this.plugin.settings.Fiend)
-                .onChange(async (value) => {
-                    this.plugin.settings.Fiend = value || DEFAULT_MONSTER_SETTINGS.Fiend;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Hybrid.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Hybrid', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Hybrid)
-                .setValue(this.plugin.settings.Hybrid)
-                .onChange(async (value) => {
-                    this.plugin.settings.Hybrid = value || DEFAULT_MONSTER_SETTINGS.Hybrid;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Insectoid.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Insectoid', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Insectoid)
-                .setValue(this.plugin.settings.Insectoid)
-                .onChange(async (value) => {
-                    this.plugin.settings.Insectoid = value || DEFAULT_MONSTER_SETTINGS.Insectoid;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Necrophage.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Necrophage', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Necrophage)
-                .setValue(this.plugin.settings.Necrophage)
-                .onChange(async (value) => {
-                    this.plugin.settings.Necrophage = value || DEFAULT_MONSTER_SETTINGS.Necrophage;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Ogroid.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Ogroid', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Ogroid)
-                .setValue(this.plugin.settings.Ogroid)
-                .onChange(async (value) => {
-                    this.plugin.settings.Ogroid = value || DEFAULT_MONSTER_SETTINGS.Ogroid;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Ooze.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Ooze', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Ooze)
-                .setValue(this.plugin.settings.Ooze)
-                .onChange(async (value) => {
-                    this.plugin.settings.Ooze = value || DEFAULT_MONSTER_SETTINGS.Ooze;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Plant.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Plant', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Plant)
-                .setValue(this.plugin.settings.Plant)
-                .onChange(async (value) => {
-                    this.plugin.settings.Plant = value || DEFAULT_MONSTER_SETTINGS.Plant;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Specter.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Specter', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Specter)
-                .setValue(this.plugin.settings.Specter)
-                .onChange(async (value) => {
-                    this.plugin.settings.Specter = value || DEFAULT_MONSTER_SETTINGS.Specter;
-                    await this.plugin.saveSettings();
-                })
-            )
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER.Vampire.icon, flexContainer);
-                    const spanElement = e.createSpan({text: 'Vampire', cls: MON_CLASS})
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Vampire)
-                .setValue(this.plugin.settings.Vampire)
-                .onChange(async (value) => {
-                    this.plugin.settings.Vampire = value || DEFAULT_MONSTER_SETTINGS.Vampire;
-                    await this.plugin.saveSettings();
-                })
-            )
+			.setName('Save Settings')
+			.setDesc('Save the changes made to the settings.')
+			.addButton((button) =>
+				button.setButtonText('Save').onClick(async () => {
+					await this.plugin.saveSettings();
+					new Notice('Settings saved.');
+					this.display();
+				}),
+			);
+
+		new Setting(root)
+			.setName('Reset Settings')
+			.setDesc('Reset all settings to their default values.')
+			.addButton((button) =>
+				button.setButtonText('Reset').onClick(async () => {
+					this.plugin.settings = {...DEFAULT_SETTINGS};
+					await this.plugin.saveSettings();
+					new Notice('Settings reset to default.');
+					this.display();
+				}),
+			);
 
     }
 }
