@@ -22,5 +22,5 @@
   },
   "include": [
     "**/*.ts"
-, "src/Main.tsx", "src/live-preview.tsx"  ]
+, "src/Main.tsx", "src/live-preview.tsx", "src/SuggestModel.tsx"  ]
 }

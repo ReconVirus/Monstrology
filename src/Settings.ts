@@ -1,8 +1,8 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import Monstrology, { MON_CLASS } from "./Main";
+import Monstrology, { ALIGNMENT, ALI_CLASS, MONSTER, MON_CLASS } from "./Main";
+import * as ReactDOM from "react-dom";
 
-
-export const DEFAULT_ALIGNNMENT_SETTINGS: AlignmentSettings = {
+export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
 	LG: 'Lawful Good',
 	NG: 'Neutral Good',
 	CG: 'Chaotic Good',
@@ -19,9 +19,11 @@ export const DEFAULT_ELEMENT_SETTINGS: ElementsSettings = {
 	Death: "Death",
 	Earth: "Earth",
 	Fire: "Fire",
+    Ice: "Ice",
 	Light: "Light",
 	Lightning: "Lightning",
 	Life: "Life",
+    Poison: "Poison",
 	Water: "Water"
 }
 export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
@@ -38,16 +40,18 @@ export const DEFAULT_MONSTER_SETTINGS: MonstorlogySettings = {
 	Insectoid: 'Insectoid',
 	Necrophage: 'Necrophage',
 	Ogroid: 'Ogroid',
+    Ooze: 'Ooze',
     Plant: 'Plant',
 	Specter: 'Specter',
 	Vampire: 'Vampire'
 }
 export const DEFAULT_SETTINGS = {
-    ...DEFAULT_ALIGNNMENT_SETTINGS,
+    ...DEFAULT_ALIGNMENT_SETTINGS,
     ...DEFAULT_ELEMENT_SETTINGS,
     ...DEFAULT_MONSTER_SETTINGS
 }
 export interface AlignmentSettings{
+    [key: string]: string,
     LG: string,
     NG: string,
     CG: string,
@@ -59,17 +63,21 @@ export interface AlignmentSettings{
     CE: string,
 }
 export interface ElementsSettings {
+    [key: string]: string,
 	Air: string,
 	Dark: string,
 	Death: string,
 	Earth: string,
 	Fire: string,
+    Ice: string,
 	Light: string,
 	Lightning: string,
 	Life: string,
+    Poison: string,
 	Water: string,
 }
 export interface MonstorlogySettings {
+    [key: string]: string,
     Aberration: string,
     Beast: string;
     Celestial: string;
@@ -83,6 +91,7 @@ export interface MonstorlogySettings {
 	Insectoid: string;
 	Necrophage: string;
 	Ogroid: string;
+    Ooze: string;
     Plant: string;
 	Specter: string;
 	Vampire: string;
@@ -96,9 +105,39 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
+    createAlignmentSetting(root: HTMLElement, alignmentKey: keyof AlignmentSettings) {
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(ALIGNMENT[alignmentKey].icon, flexContainer);
+                    const spanElement = e.createSpan({text: ALIGNMENT[alignmentKey].value, cls: ALI_CLASS});
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_ALIGNMENT_SETTINGS[alignmentKey])
+                .setValue(this.plugin.settings[alignmentKey])
+                .onChange(async (value) => {
+                    this.plugin.settings[alignmentKey] = value || DEFAULT_ALIGNMENT_SETTINGS[alignmentKey];
+                    await this.plugin.saveSettings();
+                })
+            )
+    }
+    
     display(): void {
         const {containerEl: root} = this;
         root.empty()
+
+        new Setting(root)
+            .setHeading()
+            .setName('Alignment Types')
+            .setDesc('The text used to identify each aligment type.')
+
+            Object.keys(ALIGNMENT).forEach(aligmentKey => {
+                this.createAlignmentSetting(root, aligmentKey as keyof AlignmentSettings);
+            });
 
         new Setting(root)
             .setHeading()
@@ -108,7 +147,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Aberration', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Aberration.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Aberration', cls: MON_CLASS});
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -122,7 +165,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Beast', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Beast.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Beast', cls: MON_CLASS});
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -136,7 +183,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Celestial', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Celestial.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Celestial', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -150,7 +201,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Construct', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Construct.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Construct', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -164,7 +219,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Cursed', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Cursed.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Cursed', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -178,7 +237,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Draconid', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Draconid.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Draconid', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -192,7 +255,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Elementa', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Elementa.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Elementa', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -206,7 +273,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Fairy', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Fairy.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Fairy', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -220,7 +291,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Fiend', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Fiend.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Fiend', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -234,7 +309,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Hybrid', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Hybrid.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Hybrid', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -248,7 +327,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Insectoid', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Insectoid.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Insectoid', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -262,7 +345,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Necrophage', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Necrophage.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Necrophage', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -276,7 +363,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Ogroid', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Ogroid.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Ogroid', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -290,7 +381,29 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Plant', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Ooze.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Ooze', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
+                })
+            )
+            .addText(text => text
+                .setPlaceholder(DEFAULT_MONSTER_SETTINGS.Ooze)
+                .setValue(this.plugin.settings.Ooze)
+                .onChange(async (value) => {
+                    this.plugin.settings.Ooze = value || DEFAULT_MONSTER_SETTINGS.Ooze;
+                    await this.plugin.saveSettings();
+                })
+            )
+        new Setting(root)
+            .setName(
+                createFragment(e => {
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Plant.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Plant', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -304,7 +417,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Specter', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Specter.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Specter', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
@@ -318,7 +435,11 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         new Setting(root)
             .setName(
                 createFragment(e => {
-                    e.createSpan({text: 'Vampire', cls: MON_CLASS})
+                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
+                    ReactDOM.render(MONSTER.Vampire.icon, flexContainer);
+                    const spanElement = e.createSpan({text: 'Vampire', cls: MON_CLASS})
+                    spanElement.style.marginLeft = '10px';
+                    flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text

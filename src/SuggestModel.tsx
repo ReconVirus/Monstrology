@@ -40,6 +40,12 @@ export default class SuggestionIcon extends EditorSuggest<string> {
             return null;
         }
 
+        // Check if there's a space or a backtick before the shortcode start.
+        // This ensures that we're at the start of a new shortcode.
+        if (codeStart > 0 && !/\s|`/.test(lineText[codeStart - 1])) {
+            return null;
+        }
+
         // Regex for checking if the code is not done yet.
         const regexOngoingCode = lineText
             .substring(codeStart, cursor.ch)
@@ -106,7 +112,16 @@ export default class SuggestionIcon extends EditorSuggest<string> {
         if (this.context) {
             const { editor, start, end } = this.context;
             if (editor && start && end) {
-                editor.replaceRange(`\`${this.currentTriggerWord}:${value}`, start, end);
+                // Get the text after the current cursor position.
+                const textAfter = editor.getLine(end.line).substring(end.ch, end.ch + 1);
+    
+                // Check if there's a backtick after the current cursor position.
+                const hasBacktickAfter = textAfter === '`';
+    
+                // If there's a backtick after the current cursor position, replace the range with the selected value without a trailing backtick.
+                // Otherwise, replace the range with the selected value with a trailing backtick.
+                const replacement = hasBacktickAfter ? `\`${this.currentTriggerWord}:${value}` : `\`${this.currentTriggerWord}:${value}\``;
+                editor.replaceRange(replacement, start, end);
             }
         }
     }

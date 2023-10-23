@@ -35,7 +35,7 @@ For each alignment, element, or monster type that you want to display, use the s
 in your text, where Key is either `ali`, `ele`, or `mon`. Type is one of the supporting words you want to display
 
 ### Suggestion
-on a new line entering ` follow by a letter will show a list of icons for that give letter.
+on a new line entering ` follow by a letter will show a list of icons for that given letter.
 
 ![image](https://github.com/ReconVirus/Monstrology/assets/43733760/b1faf6bb-5b43-4c6c-8fdf-23237ebc3938)
 
