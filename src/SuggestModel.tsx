@@ -13,7 +13,11 @@ import * as React from 'react';
 interface IconObject {
     value: string;
     icon: JSX.Element;
-    triggerWord: string;
+    triggerword: string;
+}
+
+function createIconObjects(entries: [string, any][], triggerword: string) {
+    return Object.fromEntries(entries.map(([key, value]) => [key, { ...value, triggerword }]));
 }
 
 export default class SuggestionIcon extends EditorSuggest<string> {
@@ -23,11 +27,10 @@ export default class SuggestionIcon extends EditorSuggest<string> {
 
     constructor(app: App) {
         super(app);
-         // Map each icon to its corresponding trigger word.
         this.allIcons = {
-            ...Object.fromEntries(Object.entries(ALIGNMENT).map(([key, value]) => [key, { ...value, triggerWord: 'ali' }])),
-            ...Object.fromEntries(Object.entries(ELEMENT).map(([key, value]) => [key, { ...value, triggerWord: 'ele' }])),
-            ...Object.fromEntries(Object.entries(MONSTER).map(([key, value]) => [key, { ...value, triggerWord: 'mon' }]))
+            ...createIconObjects(Object.entries(ALIGNMENT), 'ali'),
+            ...createIconObjects(Object.entries(ELEMENT), 'ele'),
+            ...createIconObjects(Object.entries(MONSTER), 'mon')
         };
     }
 
@@ -39,7 +42,7 @@ export default class SuggestionIcon extends EditorSuggest<string> {
         if (codeStart === -1) {
             return null;
         }
-
+    
         // Check if there's a space or a backtick before the shortcode start.
         // This ensures that we're at the start of a new shortcode.
         if (codeStart > 0 && !/\s|`/.test(lineText[codeStart - 1])) {
@@ -49,12 +52,12 @@ export default class SuggestionIcon extends EditorSuggest<string> {
         // Regex for checking if the code is not done yet.
         const regexOngoingCode = lineText
             .substring(codeStart, cursor.ch)
-            .match(/^(`)\w+$/g);
+            .match(/^(`)\w+(`)?$/g);
     
         if (regexOngoingCode === null) {
             return null;
         }
-
+    
           // Extract the trigger word from the context.query.
         this.triggerword = regexOngoingCode[0].split(':')[0].substring(1);
     
@@ -78,13 +81,12 @@ export default class SuggestionIcon extends EditorSuggest<string> {
     getSuggestions(context: EditorSuggestContext): string[] {
         const queryLowerCase = context.query.substring(1).toLowerCase();
     
-        // Filter the icons based on the query.
         const iconsNameArray = Object.values(this.allIcons)
             .filter((iconObject: IconObject) =>
                 iconObject.value.toLowerCase().startsWith(queryLowerCase),
             )
         if (iconsNameArray.length > 0) {
-            this.currentTriggerWord = iconsNameArray[0].triggerWord;
+            this.currentTriggerWord = iconsNameArray[0].triggerword;
             return iconsNameArray.map((iconObject) => iconObject.value);
         }
     
@@ -98,10 +100,8 @@ export default class SuggestionIcon extends EditorSuggest<string> {
         el.style.alignItems = 'center';
         el.style.gap = '0.25rem';
     
-        if (iconObject && React.isValidElement(iconObject.icon)) {
-            // Render the icon.
+        if (React.isValidElement(iconObject.icon)) {
             ReactDOM.render(iconObject.icon, el);
-            // Add the value as text.
             const textNode = document.createElement('span');
             textNode.textContent = value;
             el.appendChild(textNode);
@@ -111,16 +111,18 @@ export default class SuggestionIcon extends EditorSuggest<string> {
     selectSuggestion(value: string, evt: MouseEvent | KeyboardEvent): void {
         if (this.context) {
             const { editor, start, end } = this.context;
+            
             if (editor && start && end) {
                 // Get the text after the current cursor position.
                 const textAfter = editor.getLine(end.line).substring(end.ch, end.ch + 1);
-    
+        
                 // Check if there's a backtick after the current cursor position.
                 const hasBacktickAfter = textAfter === '`';
-    
-                // If there's a backtick after the current cursor position, replace the range with the selected value without a trailing backtick.
-                // Otherwise, replace the range with the selected value with a trailing backtick.
-                const replacement = hasBacktickAfter ? `\`${this.currentTriggerWord}:${value}` : `\`${this.currentTriggerWord}:${value}\``;
+                if (hasBacktickAfter) {
+                    editor.replaceRange('', { line: end.line, ch: end.ch }, { line: end.line, ch: end.ch + 1 });
+                }
+        
+                const replacement = `\`${this.currentTriggerWord}:${value}\``;
                 editor.replaceRange(replacement, start, end);
             }
         }
