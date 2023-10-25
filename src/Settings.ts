@@ -3,54 +3,59 @@ import Monstrology, { ALIGNMENT, ALI_CLASS, ELEMENT, ELE_CLASS, MONSTER, MON_CLA
 import * as ReactDOM from "react-dom";
 
 export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
-	LG: 'Lawful Good',
-	NG: 'Neutral Good',
-	CG: 'Chaotic Good',
-	LN: 'Lawful Neutral',
-	TN: 'True Neutral',
-	CN: 'Chaotic Neutral',
-	LE: 'Lawful Evil',
-	NE: 'Neutral Evil',
-	CE: 'Chaotic Evil',
+    LG: 'Lawful Good',
+    NG: 'Neutral Good',
+    CG: 'Chaotic Good',
+    LN: 'Lawful Neutral',
+    TN: 'True Neutral',
+    CN: 'Chaotic Neutral',
+    LE: 'Lawful Evil',
+    NE: 'Neutral Evil',
+    CE: 'Chaotic Evil',
 }
 export const DEFAULT_ELEMENT_SETTINGS: ElementSettings = {
-	Air: "Air",
-	Dark: 'Dark',
-	Death: "Death",
-	Earth: "Earth",
-	Fire: "Fire",
+    Air: "Air",
+    Dark: 'Dark',
+    Death: "Death",
+    Earth: "Earth",
+    Fire: "Fire",
     Ice: "Ice",
-	Light: "Light",
-	Lightning: "Lightning",
-	Life: "Life",
+    Light: "Light",
+    Lightning: "Lightning",
+    Life: "Life",
     Poison: "Poison",
-	Water: "Water"
+    Water: "Water"
 }
 export const DEFAULT_MONSTER_SETTINGS: MonsterSettings = {
     Aberration: 'Aberration',
     Beast: 'Beast',
     Celestial: 'Celestial',
     Construct: 'Construct',
-	Cursed: 'Cursed',
-	Draconid: 'Draconid',
-	Elementa: 'Elementa',
+    Cursed: 'Cursed',
+    Draconid: 'Draconid',
+    Elementa: 'Elementa',
     Fairy: 'Fairy',
     Fiend: 'Fiend',
-	Hybrid: 'Hybrid',
-	Insectoid: 'Insectoid',
-	Necrophage: 'Necrophage',
-	Ogroid: 'Ogroid',
+    Hybrid: 'Hybrid',
+    Insectoid: 'Insectoid',
+    Necrophage: 'Necrophage',
+    Ogroid: 'Ogroid',
     Ooze: 'Ooze',
     Plant: 'Plant',
-	Specter: 'Specter',
-	Vampire: 'Vampire'
+    Specter: 'Specter',
+    Vampire: 'Vampire'
 }
-export const DEFAULT_SETTINGS = {
-    ...DEFAULT_ALIGNMENT_SETTINGS,
-    ...DEFAULT_ELEMENT_SETTINGS,
-    ...DEFAULT_MONSTER_SETTINGS
+export const DEFAULT_SETTINGS: AllSettings = {
+    alignmentsettings: DEFAULT_ALIGNMENT_SETTINGS,
+    elementsettings: DEFAULT_ELEMENT_SETTINGS,
+    monstersettings: DEFAULT_MONSTER_SETTINGS
 }
-export interface AlignmentSettings{
+export interface AllSettings {
+    alignmentsettings: AlignmentSettings,
+    elementsettings: ElementSettings,
+    monstersettings: MonsterSettings,
+}
+export interface AlignmentSettings {
     [key: string]: string,
     LG: string,
     NG: string,
@@ -64,17 +69,17 @@ export interface AlignmentSettings{
 }
 export interface ElementSettings {
     [key: string]: string,
-	Air: string,
-	Dark: string,
-	Death: string,
-	Earth: string,
-	Fire: string,
+    Air: string,
+    Dark: string,
+    Death: string,
+    Earth: string,
+    Fire: string,
     Ice: string,
-	Light: string,
-	Lightning: string,
-	Life: string,
+    Light: string,
+    Lightning: string,
+    Life: string,
     Poison: string,
-	Water: string,
+    Water: string,
 }
 export interface MonsterSettings {
     [key: string]: string,
@@ -82,19 +87,19 @@ export interface MonsterSettings {
     Beast: string;
     Celestial: string;
     Construct: string;
-	Cursed: string;
-	Draconid: string;
-	Elementa: string;
+    Cursed: string;
+    Draconid: string;
+    Elementa: string;
     Fairy: string,
     Fiend: string,
-	Hybrid: string;
-	Insectoid: string;
-	Necrophage: string;
-	Ogroid: string;
+    Hybrid: string;
+    Insectoid: string;
+    Necrophage: string;
+    Ogroid: string;
     Ooze: string;
     Plant: string;
-	Specter: string;
-	Vampire: string;
+    Specter: string;
+    Vampire: string;
 }
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
@@ -118,9 +123,9 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
             )
             .addText(text => text
                 .setPlaceholder(DEFAULT_ALIGNMENT_SETTINGS[alignmentKey])
-                .setValue(this.plugin.settings[alignmentKey])
+                .setValue(this.plugin.settings.alignmentsettings[alignmentKey])
                 .onChange(async (value) => {
-                    this.plugin.settings[alignmentKey] = value || DEFAULT_ALIGNMENT_SETTINGS[alignmentKey];
+                    this.plugin.settings.alignmentsettings[alignmentKey] = value || DEFAULT_ALIGNMENT_SETTINGS[alignmentKey];
                     await this.plugin.saveSettings();
                 })
             )
@@ -139,9 +144,9 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
             )
             .addText(text => text
                 .setPlaceholder(DEFAULT_ELEMENT_SETTINGS[elementKey])
-                .setValue(this.plugin.settings[elementKey])
+                .setValue(this.plugin.settings.elementsettings[elementKey])
                 .onChange(async (value) => {
-                    this.plugin.settings[elementKey] = value || DEFAULT_ELEMENT_SETTINGS[elementKey];
+                    this.plugin.settings.elementsettings[elementKey] = value || DEFAULT_ELEMENT_SETTINGS[elementKey];
                     await this.plugin.saveSettings();
                 })
             )
@@ -160,9 +165,9 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
             )
             .addText(text => text
                 .setPlaceholder(DEFAULT_MONSTER_SETTINGS[monsterKey])
-                .setValue(this.plugin.settings[monsterKey])
+                .setValue(this.plugin.settings.monstersettings[monsterKey])
                 .onChange(async (value) => {
-                    this.plugin.settings[monsterKey] = value || DEFAULT_MONSTER_SETTINGS[monsterKey];
+                    this.plugin.settings.monstersettings[monsterKey] = value || DEFAULT_MONSTER_SETTINGS[monsterKey];
                     await this.plugin.saveSettings();
                 })
             )

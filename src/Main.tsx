@@ -1,7 +1,7 @@
 import { Extension } from "@codemirror/state";
 import { MarkdownPostProcessor, MarkdownRenderChild, Plugin } from "obsidian";
 import { MonstrologyLivePlugin } from "./live-preview";
-import MonstrologySettingsTab, {DEFAULT_SETTINGS, AlignmentSettings} from "./Settings";
+import MonstrologySettingsTab, {AllSettings, DEFAULT_SETTINGS,} from "./Settings";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BsFillLightningFill } from "react-icons/bs";
@@ -101,7 +101,7 @@ export const MONSTER:IconType = {
 };
 
 export default class Monstrology extends Plugin {
-	settings: AlignmentSettings;
+	settings: AllSettings;
 	private editorExtensions: Extension[] = []
 
 	createReplacements(trigger: string, types: Record<string, {value: string, icon: JSX.Element}>) {
