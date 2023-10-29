@@ -45,13 +45,14 @@ import SuggestionIcon from "./SuggestModel";
 export const ALI_CLASS = "AlignmentType";
 export const ELE_CLASS = "ElementType";
 export const MON_CLASS = "MonsterType";
-export const TRIGGER_WORD = ["ali", "ele", "mon"];
+
 
 const globalStyle = { verticalAlign: "sub", fontSize: "1.5em" };
 const generateIcon = (IconComponent: React.ElementType, color: string) => (
 	<IconComponent style={{ ...globalStyle, color }} />
 );
 
+type TriggerType = 'ali' | 'ele' | 'mon';
 type IconType = {
 	[key: string]: { value: string; icon: JSX.Element };
 };
@@ -104,17 +105,22 @@ export default class Monstrology extends Plugin {
 	settings: AllSettings;
 	private editorExtensions: Extension[] = []
 
-	createReplacements(trigger: string, types: Record<string, {value: string, icon: JSX.Element}>) {
-		return Object.values(types).map(type => ({ regex: new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i'), type: type.value }));
-	}
-	alignmentReplacements() {
-		return this.createReplacements('ali', ALIGNMENT);
-	}
-	elementReplacements() {
-		return this.createReplacements('ele', ELEMENT);
-	}
-	monsterReplacements() {
-		return this.createReplacements('mon', MONSTER);
+	createReplacements(trigger: TriggerType) {
+		let types: IconType;
+		switch (trigger) {
+			case 'ali':
+				types = ALIGNMENT;
+				break;
+			case 'ele':
+				types = ELEMENT;
+				break;
+			case 'mon':
+				types = MONSTER;
+				break;
+		}
+		return Object.values(types).map(type => { const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i');
+			return { regex, type: type.value };
+		});
 	}
 
 	async onload() {
@@ -143,29 +149,23 @@ export default class Monstrology extends Plugin {
 		if(!codes.length) {
 			return
 		}
-		const alignmentReplacements = this.alignmentReplacements()
-		const monsterReplacements = this.monsterReplacements()
-		const elementReplacements = this.elementReplacements()
 		codes.forEach(codeBlock => {
 			const original = codeBlock.innerText.trim();
 			const [trigger, type] = original.split(':');
-			if (trigger === 'mon') {
-				const replacement = monsterReplacements.find(r => r.type.toLowerCase() === type.toLowerCase());
-				if (replacement) {
-					this.addChild(new MonsterMarkdownRenderChild(codeBlock, type))
+			const replacements = this.createReplacements(trigger as TriggerType);
+			const replacement = replacements.find(r => r.type.toLowerCase() === type.toLowerCase());
+			if (replacement) {
+				switch (trigger) {
+					case 'mon':
+						this.addChild(new MonsterMarkdownRenderChild(codeBlock, type));
+						break;
+					case 'ele':
+						this.addChild(new ElementMarkdownRenderChild(codeBlock, type));
+						break;
+					case 'ali':
+						this.addChild(new AlignmentMarkdownRenderChild(codeBlock, type));
+						break;
 				}
-			}
-			if (trigger === 'ele') {
-				const replacement = elementReplacements.find(r => r.type.toLowerCase() === type.toLowerCase());
-				if (replacement) {
-					this.addChild(new ElementMarkdownRenderChild(codeBlock, type))
-				}
-			} 
-			if (trigger === 'ali') {
-				const replacement = alignmentReplacements.find(r => r.type === type);
-				if (replacement) (
-					this.addChild(new AlignmentMarkdownRenderChild(codeBlock, type))
-				)
 			}
 		})
 	}
@@ -184,20 +184,14 @@ class BaseMarkdownRenderChild extends MarkdownRenderChild {
     }
 }
 
-class AlignmentMarkdownRenderChild extends BaseMarkdownRenderChild {
-    constructor(element: HTMLElement, alignmentType: string) {
-        super(element, alignmentType, ALIGNMENT);
+function createMarkdownRenderChildClass(iconType: IconType) {
+    return class extends BaseMarkdownRenderChild {
+        constructor(element: HTMLElement, type: string) {
+            super(element, type, iconType);
+        }
     }
 }
 
-class ElementMarkdownRenderChild extends BaseMarkdownRenderChild {
-    constructor(element: HTMLElement, elementType: string) {
-        super(element, elementType, ELEMENT);
-    }
-}
-
-class MonsterMarkdownRenderChild extends BaseMarkdownRenderChild {
-    constructor(element: HTMLElement, monsterType: string) {
-        super(element, monsterType, MONSTER);
-    }
-}
+const AlignmentMarkdownRenderChild = createMarkdownRenderChildClass(ALIGNMENT);
+const ElementMarkdownRenderChild = createMarkdownRenderChildClass(ELEMENT);
+const MonsterMarkdownRenderChild = createMarkdownRenderChildClass(MONSTER);

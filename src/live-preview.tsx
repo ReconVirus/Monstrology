@@ -18,7 +18,6 @@ class AlignmentWidget extends WidgetType {
         return span;
     }
 }
-
 class ElementWidget extends WidgetType {
     constructor(public elementType: string) { 
         super() 
@@ -32,7 +31,6 @@ class ElementWidget extends WidgetType {
         return span;
     }
 }
-
 class MonstrologyWidget extends WidgetType {
     constructor(public monsterType: string) { 
         super() 
@@ -47,6 +45,7 @@ class MonstrologyWidget extends WidgetType {
     }
 }
 
+type TriggerType = 'ali' | 'ele' | 'mon';
 
 export function MonstrologyLivePlugin(plugin: Monstrology) {
     return ViewPlugin.fromClass(
@@ -73,7 +72,7 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                 const builder = new RangeSetBuilder<Decoration>();
             
                 // List the replacements to be used
-                const replacements = [...plugin.monsterReplacements(), ...plugin.elementReplacements(), ...plugin.alignmentReplacements()]
+                const replacements = ['ali', 'ele', 'mon'].flatMap(trigger => plugin.createReplacements(trigger as TriggerType));
             
                 for (const {from, to} of view.visibleRanges) {
                     syntaxTree(view.state).iterate({
