@@ -42,20 +42,26 @@ import { PiPlantFill } from "react-icons/pi";
 import { SiElement } from "react-icons/si";
 import SuggestionIcon from "./SuggestModel";
 
-export const ALI_CLASS = "AlignmentType";
-export const ELE_CLASS = "ElementType";
-export const MON_CLASS = "MonsterType";
+export type IconType = {
+	[key: string]: { value: string; icon: JSX.Element };
+};
 
+enum TriggerType {
+	Ali = 'ali',
+	Ele = 'ele',
+	Mon = 'mon'
+}
+
+export const CLASS_TYPES = {
+	ALI: "AlignmentType",
+	ELE: "ElementType",
+	MON: "MonsterType"
+};
 
 const globalStyle = { verticalAlign: "sub", fontSize: "1.5em" };
 const generateIcon = (IconComponent: React.ElementType, color: string) => (
 	<IconComponent style={{ ...globalStyle, color }} />
 );
-
-type TriggerType = 'ali' | 'ele' | 'mon';
-type IconType = {
-	[key: string]: { value: string; icon: JSX.Element };
-};
 
 export const ALIGNMENT:IconType = {
 	LG: { value: "LG", icon: generateIcon(GiAngelWings, "lightgoldenrodyellow")},
@@ -100,45 +106,49 @@ export const MONSTER:IconType = {
 	Specter: { value: "Specter", icon: generateIcon(GiHood, "ghostwhite")},
 	Vampire: { value: "Vampire", icon: generateIcon(GiBatwingEmblem, "crimson")},
 };
+
 const TRIGGER_TYPES: Record<TriggerType, IconType> = {
-	'ali': ALIGNMENT,
-	'ele': ELEMENT,
-	'mon': MONSTER
+	[TriggerType.Ali]: ALIGNMENT,
+	[TriggerType.Ele]: ELEMENT,
+	[TriggerType.Mon]: MONSTER
 };
+
 export default class Monstrology extends Plugin {
 	settings: AllSettings;
 	private editorExtensions: Extension[] = []
 
-	createReplacements(trigger: TriggerType) {
+	createReplacements = (trigger: TriggerType) => {
 		const types = TRIGGER_TYPES[trigger];
-		return Object.values(types).map(type => {
-			const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i');
-			return { regex, type: type.value };
+		return Object.values(types).map(({ value }) => {
+			const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${value}\\s*$`, 'i');
+			return { regex, type: value };
 		});
 	}
 
-	async onload() {
-		await this.loadSettings()
-		this.addSettingTab(new MonstrologySettingsTab(this.app, this))
-		this.registerMarkdownPostProcessor(this.markdownPostProcessor.bind(this))
-		this.registerEditorExtension(this.editorExtensions)
+	onload = async () => {
+		await this.loadSettings();
+		this.addSettingTab(new MonstrologySettingsTab(this.app, this));
+		this.registerMarkdownPostProcessor(this.markdownPostProcessor.bind(this));
+		this.registerEditorExtension(this.editorExtensions);
 		this.registerEditorSuggest(new SuggestionIcon(this.app));
-		this.updateExtension()
+		this.updateExtension();
 		console.log("Monstrology loaded");
 	}
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
+	loadSettings = async () => {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
-	updateExtension(){
-		this.editorExtensions.length = 0
-		this.editorExtensions.push(MonstrologyLivePlugin(this))
-		this.app.workspace.updateOptions()
+
+	updateExtension = () => {
+		this.editorExtensions.length = 0;
+		this.editorExtensions.push(MonstrologyLivePlugin(this));
+		this.app.workspace.updateOptions();
 	}
-	async saveSettings(){
-		await this.saveData(this.settings)
-		this.updateExtension()
+
+	saveSettings = async () => {
+		await this.saveData(this.settings);
+		this.updateExtension();
 	}
-	async markdownPostProcessor(element: HTMLElement, context: MarkdownPostProcessor): Promise<any> {
+	markdownPostProcessor = async (element: HTMLElement, context: MarkdownPostProcessor) => {
 		let codes = element.querySelectorAll('code');
 		if(!codes.length) {
 			return
@@ -169,7 +179,7 @@ class BaseMarkdownRenderChild extends MarkdownRenderChild {
 		super(element)
 	}
 
-	onload() : void {
+	onload = () : void => {
 		const typeClass = this.type.toLowerCase();
 		const Type = this.containerEl.createSpan({cls: `${typeClass}`})
 		const icon = this.iconType[this.type as keyof typeof this.iconType]?.icon;
@@ -178,7 +188,7 @@ class BaseMarkdownRenderChild extends MarkdownRenderChild {
 	}
 }
 
-function createMarkdownRenderChildClass(iconType: IconType) {
+const createMarkdownRenderChildClass = (iconType: IconType) => {
 	return class extends BaseMarkdownRenderChild {
 		constructor(element: HTMLElement, type: string) {
 			super(element, type, iconType);

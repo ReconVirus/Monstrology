@@ -1,4 +1,4 @@
-import Monstrology, { ALIGNMENT, ALI_CLASS, ELEMENT, ELE_CLASS, MONSTER, MON_CLASS } from "./Main"
+import Monstrology, { ALIGNMENT,CLASS_TYPES, ELEMENT, MONSTER } from "./Main"
 import { PluginValue, EditorView, ViewPlugin, ViewUpdate, WidgetType, Decoration, DecorationSet } from "@codemirror/view"
 import { RangeSetBuilder } from '@codemirror/state';
 import { syntaxTree } from "@codemirror/language";
@@ -12,8 +12,7 @@ class AlignmentWidget extends WidgetType {
 
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
-        span.classList.add(ALI_CLASS);
-        console.log('Rendering icon for alignment type:', ALIGNMENT[this.alignmentType as keyof typeof ALIGNMENT]?.icon)
+        span.classList.add(CLASS_TYPES.ALI);
         ReactDOM.render(ALIGNMENT[this.alignmentType as keyof typeof ALIGNMENT].icon, span);
         return span;
     }
@@ -25,8 +24,7 @@ class ElementWidget extends WidgetType {
 
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
-        span.classList.add(ELE_CLASS);
-        console.log('Rendering icon for element type:', ELEMENT[this.elementType as keyof typeof ELEMENT]?.icon)
+        span.classList.add(CLASS_TYPES.ELE);
         ReactDOM.render(ELEMENT[this.elementType as keyof typeof ELEMENT].icon, span);
         return span;
     }
@@ -38,14 +36,17 @@ class MonstrologyWidget extends WidgetType {
 
     toDOM(view: EditorView): HTMLElement {
         const span = document.createElement('span')
-        span.classList.add(MON_CLASS);
-        console.log('Rendering icon for monster type:', MONSTER[this.monsterType as keyof typeof MONSTER]?.icon)
+        span.classList.add(CLASS_TYPES.MON);
         ReactDOM.render(MONSTER[this.monsterType as keyof typeof MONSTER].icon, span);
         return span;
     }
 }
 
-type TriggerType = 'ali' | 'ele' | 'mon';
+enum TriggerType {
+	Ali = 'ali',
+	Ele = 'ele',
+	Mon = 'mon'
+}
 
 function createDecoration(widget: WidgetType) {
     return Decoration.replace({

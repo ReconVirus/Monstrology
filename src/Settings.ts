@@ -1,60 +1,7 @@
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
-import Monstrology, { ALIGNMENT, ALI_CLASS, ELEMENT, ELE_CLASS, MONSTER, MON_CLASS } from "./Main";
+import Monstrology, { ALIGNMENT, CLASS_TYPES, ELEMENT, IconType, MONSTER, } from "./Main";
 import * as ReactDOM from "react-dom";
 
-export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
-    LG: 'Lawful Good',
-    NG: 'Neutral Good',
-    CG: 'Chaotic Good',
-    LN: 'Lawful Neutral',
-    TN: 'True Neutral',
-    CN: 'Chaotic Neutral',
-    LE: 'Lawful Evil',
-    NE: 'Neutral Evil',
-    CE: 'Chaotic Evil',
-}
-export const DEFAULT_ELEMENT_SETTINGS: ElementSettings = {
-    Air: "Air",
-    Dark: 'Dark',
-    Death: "Death",
-    Earth: "Earth",
-    Fire: "Fire",
-    Ice: "Ice",
-    Light: "Light",
-    Lightning: "Lightning",
-    Life: "Life",
-    Poison: "Poison",
-    Water: "Water"
-}
-export const DEFAULT_MONSTER_SETTINGS: MonsterSettings = {
-    Aberration: 'Aberration',
-    Beast: 'Beast',
-    Celestial: 'Celestial',
-    Construct: 'Construct',
-    Cursed: 'Cursed',
-    Draconid: 'Draconid',
-    Elementa: 'Elementa',
-    Fairy: 'Fairy',
-    Fiend: 'Fiend',
-    Hybrid: 'Hybrid',
-    Insectoid: 'Insectoid',
-    Necrophage: 'Necrophage',
-    Ogroid: 'Ogroid',
-    Ooze: 'Ooze',
-    Plant: 'Plant',
-    Specter: 'Specter',
-    Vampire: 'Vampire'
-}
-export const DEFAULT_SETTINGS: AllSettings = {
-    alignmentsettings: DEFAULT_ALIGNMENT_SETTINGS,
-    elementsettings: DEFAULT_ELEMENT_SETTINGS,
-    monstersettings: DEFAULT_MONSTER_SETTINGS
-}
-export interface AllSettings {
-    alignmentsettings: AlignmentSettings,
-    elementsettings: ElementSettings,
-    monstersettings: MonsterSettings,
-}
 export interface AlignmentSettings {
     [key: string]: string,
     LG: string,
@@ -101,6 +48,60 @@ export interface MonsterSettings {
     Specter: string;
     Vampire: string;
 }
+export interface AllSettings {
+	alignmentsettings: AlignmentSettings,
+	elementsettings: ElementSettings,
+	monstersettings: MonsterSettings
+}
+
+export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
+	LG:'Lawful Good',
+	NG:'Neutral Good',
+	CG:'Chaotic Good',
+	LN:'Lawful Neutral',
+	TN:'True Neutral',
+	CN:'Chaotic Neutral',
+	LE:'Lawful Evil',
+	NE:'Neutral Evil',
+	CE:'Chaotic Evil'
+};
+export const DEFAULT_ELEMENT_SETTINGS: ElementSettings = {
+	Air:"Air",
+	Dark:'Dark',
+	Death:"Death",
+	Earth:"Earth",
+	Fire:"Fire",
+	Ice:"Ice",
+	Light:"Light",
+	Lightning:"Lightning",
+	Life:"Life",
+	Poison:"Poison",
+	Water:"Water"
+};
+export const DEFAULT_MONSTER_SETTINGS: MonsterSettings = {
+	Aberration:'Aberration',
+	Beast:'Beast',
+	Celestial:'Celestial',
+	Construct:'Construct',
+	Cursed:'Cursed',
+	Draconid:'Draconid',
+	Elementa:'Elementa',
+	Fairy:'Fairy',
+	Fiend:'Fiend',
+	Hybrid:'Hybrid',
+	Insectoid:'Insectoid',
+	Necrophage:'Necrophage',
+	Ogroid:'Ogroid',
+	Ooze:'Ooze',
+	Plant:'Plant',
+	Specter:'Specter',
+	Vampire:'Vampire'
+};
+export const DEFAULT_SETTINGS = {
+	alignmentsettings : DEFAULT_ALIGNMENT_SETTINGS,
+	elementsettings : DEFAULT_ELEMENT_SETTINGS,
+	monstersettings : DEFAULT_MONSTER_SETTINGS
+};
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
     plugin: Monstrology;
@@ -110,122 +111,76 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
         this.plugin = plugin;
     }
 
-    createAlignmentSetting(root: HTMLElement, alignmentKey: keyof AlignmentSettings) {
+    createSetting(root: HTMLElement, key: keyof AlignmentSettings | keyof ElementSettings | keyof MonsterSettings, settings: AlignmentSettings | ElementSettings | MonsterSettings, defaultSettings: AlignmentSettings | ElementSettings | MonsterSettings, iconType: IconType, classType: string) {
         new Setting(root)
             .setName(
                 createFragment(e => {
                     const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(ALIGNMENT[alignmentKey].icon, flexContainer);
-                    const spanElement = e.createSpan({text: ALIGNMENT[alignmentKey].value, cls: ALI_CLASS});
+                    ReactDOM.render(iconType[key].icon, flexContainer);
+                    const spanElement = e.createSpan({text: iconType[key].value, cls: classType});
                     spanElement.style.marginLeft = '10px';
                     flexContainer.appendChild(spanElement);
                 })
             )
             .addText(text => text
-                .setPlaceholder(DEFAULT_ALIGNMENT_SETTINGS[alignmentKey])
-                .setValue(this.plugin.settings.alignmentsettings[alignmentKey])
+                .setPlaceholder(defaultSettings[key])
+                .setValue(settings[key])
                 .onChange(async (value) => {
-                    this.plugin.settings.alignmentsettings[alignmentKey] = value || DEFAULT_ALIGNMENT_SETTINGS[alignmentKey];
+                    settings[key] = value || defaultSettings[key];
                     await this.plugin.saveSettings();
                 })
             )
     }
-
-    createElementSetting(root: HTMLElement, elementKey: keyof ElementSettings) {
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(ELEMENT[elementKey].icon, flexContainer);
-                    const spanElement = e.createSpan({text: ELEMENT[elementKey].value, cls: ELE_CLASS});
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_ELEMENT_SETTINGS[elementKey])
-                .setValue(this.plugin.settings.elementsettings[elementKey])
-                .onChange(async (value) => {
-                    this.plugin.settings.elementsettings[elementKey] = value || DEFAULT_ELEMENT_SETTINGS[elementKey];
-                    await this.plugin.saveSettings();
-                })
-            )
+    createAlignmentSetting = (root: HTMLElement, alignmentKey: keyof AlignmentSettings) => {
+        this.createSetting(root, alignmentKey, this.plugin.settings.alignmentsettings, DEFAULT_ALIGNMENT_SETTINGS, ALIGNMENT, CLASS_TYPES.ALI);
     }
-
-    createMonsterSetting(root: HTMLElement, monsterKey: keyof MonsterSettings) {
-        new Setting(root)
-            .setName(
-                createFragment(e => {
-                    const flexContainer = e.createEl('div', { attr: { style: 'display: flex; align-items: center;' } });
-                    ReactDOM.render(MONSTER[monsterKey].icon, flexContainer);
-                    const spanElement = e.createSpan({text: MONSTER[monsterKey].value, cls: MON_CLASS});
-                    spanElement.style.marginLeft = '10px';
-                    flexContainer.appendChild(spanElement);
-                })
-            )
-            .addText(text => text
-                .setPlaceholder(DEFAULT_MONSTER_SETTINGS[monsterKey])
-                .setValue(this.plugin.settings.monstersettings[monsterKey])
-                .onChange(async (value) => {
-                    this.plugin.settings.monstersettings[monsterKey] = value || DEFAULT_MONSTER_SETTINGS[monsterKey];
-                    await this.plugin.saveSettings();
-                })
-            )
+    createElementSetting = (root: HTMLElement, elementKey: keyof ElementSettings) => {
+        this.createSetting(root, elementKey, this.plugin.settings.elementsettings, DEFAULT_ELEMENT_SETTINGS, ELEMENT, CLASS_TYPES.ELE);
     }
-
+    createMonsterSetting = (root: HTMLElement, monsterKey: keyof MonsterSettings) => {
+        this.createSetting(root, monsterKey, this.plugin.settings.monstersettings, DEFAULT_MONSTER_SETTINGS, MONSTER, CLASS_TYPES.MON);
+    }
+    
     display(): void {
         const {containerEl: root} = this;
         root.empty()
-
-        new Setting(root)
-            .setHeading()
-            .setName('Alignment Types')
-            .setDesc('The text used to identify each aligment type.')
-
-            Object.keys(ALIGNMENT).forEach(aligmentKey => {
-                this.createAlignmentSetting(root, aligmentKey as keyof AlignmentSettings);
+    
+        const displaySettingsSection = (title: string, settings: AlignmentSettings | ElementSettings | MonsterSettings, createSetting: (root: HTMLElement, key: keyof AlignmentSettings | keyof ElementSettings | keyof MonsterSettings) => void) => {
+            new Setting(root)
+                .setHeading()
+                .setName(`${title} Types`)
+                .setDesc(`The text used to identify each ${title.toLowerCase()} type.`);
+    
+            Object.keys(settings).forEach(key => {
+                createSetting(root, key as keyof AlignmentSettings | keyof ElementSettings | keyof MonsterSettings);
             });
-
+        }
+    
+        displaySettingsSection('Alignment', this.plugin.settings.alignmentsettings, this.createAlignmentSetting);
+        displaySettingsSection('Element', this.plugin.settings.elementsettings, this.createElementSetting);
+        displaySettingsSection('Monster', this.plugin.settings.monstersettings, this.createMonsterSetting);
+    
         new Setting(root)
-            .setHeading()
-            .setName('Element Types')
-            .setDesc('The text used to identify each element type.')
-
-            Object.keys(ELEMENT).forEach(elementKey => {
-                this.createElementSetting(root, elementKey as keyof ElementSettings)
-            });
-
+            .setName('Save Settings')
+            .setDesc('Save the changes made to the settings.')
+            .addButton((button) =>
+                button.setButtonText('Save').onClick(async () => {
+                    await this.plugin.saveSettings();
+                    new Notice('Settings saved.');
+                    this.display();
+                }),
+            );
+    
         new Setting(root)
-            .setHeading()
-            .setName('Monster Types')
-            .setDesc('The text used to identify each monster type.')
-
-            Object.keys(MONSTER).forEach(monsterKey => {
-                this.createMonsterSetting(root, monsterKey as keyof MonsterSettings)
-            });
-
-        new Setting(root)
-			.setName('Save Settings')
-			.setDesc('Save the changes made to the settings.')
-			.addButton((button) =>
-				button.setButtonText('Save').onClick(async () => {
-					await this.plugin.saveSettings();
-					new Notice('Settings saved.');
-					this.display();
-				}),
-			);
-
-		new Setting(root)
-			.setName('Reset Settings')
-			.setDesc('Reset all settings to their default values.')
-			.addButton((button) =>
-				button.setButtonText('Reset').onClick(async () => {
-					this.plugin.settings = {...DEFAULT_SETTINGS};
-					await this.plugin.saveSettings();
-					new Notice('Settings reset to default.');
-					this.display();
-				}),
-			);
-
+            .setName('Reset Settings')
+            .setDesc('Reset all settings to their default values.')
+            .addButton((button) =>
+                button.setButtonText('Reset').onClick(async () => {
+                    this.plugin.settings = {...DEFAULT_SETTINGS};
+                    await this.plugin.saveSettings();
+                    new Notice('Settings reset to default.');
+                    this.display();
+                }),
+            );
     }
 }
