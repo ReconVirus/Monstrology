@@ -16,7 +16,10 @@ interface IconObject {
     triggerword: string;
 }
 
-function createIconObjects(entries: [string, any][], triggerword: string) {
+const BACKTICK = '`';
+const REGEX_ONGOING_CODE = /^(`)\w+(`)?$/g;
+
+const createIconObjects = (entries: [string, any][], triggerword: string): Record<string, IconObject> => {
     return Object.fromEntries(entries.map(([key, value]) => [key, { ...value, triggerword }]));
 }
 
@@ -36,10 +39,6 @@ export default class SuggestionIcon extends EditorSuggest<string> {
 
     onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
         const lineText = editor.getLine(cursor.line);
-
-        const BACKTICK = '`';
-        const REGEX_ONGOING_CODE = /^(`)\w+(`)?$/g;
-
         const codeStart = lineText.substring(0, cursor.ch).lastIndexOf(BACKTICK);
     
         // `onTrigger` needs to return `null` as soon as possible to save processing performance.
@@ -57,16 +56,13 @@ export default class SuggestionIcon extends EditorSuggest<string> {
         const regexOngoingCode = lineText
             .substring(codeStart, cursor.ch)
             .match(REGEX_ONGOING_CODE);
-    
         if (regexOngoingCode === null) {
             return null;
         }
     
           // Extract the trigger word from the context.query.
         this.triggerword = regexOngoingCode[0].split(':')[0].substring(1);
-    
         const startingIndex = lineText.indexOf(regexOngoingCode[0]);
-    
         return {
             start: {
                 line: cursor.line,
@@ -79,10 +75,8 @@ export default class SuggestionIcon extends EditorSuggest<string> {
             query: regexOngoingCode[0],
         };
     }
-    
     getSuggestions = (context: EditorSuggestContext): string[] => {
         const queryLowerCase = context.query.substring(1).toLowerCase();
-    
         const iconsNameArray = Object.values(this.allIcons)
             .filter((iconObject: IconObject) =>
                 iconObject.value.toLowerCase().startsWith(queryLowerCase),
@@ -91,39 +85,27 @@ export default class SuggestionIcon extends EditorSuggest<string> {
             this.currentTriggerWord = iconsNameArray[0].triggerword;
             return iconsNameArray.map((iconObject) => iconObject.value);
         }
-    
         return [];
     }
-    
-    renderSuggestion(value: string, el: HTMLElement): void {
-        const iconObject: IconObject = this.allIcons[value];
-    
+    renderSuggestion(suggestionValue: string, el: HTMLElement): void {
+        const { icon, value } = this.allIcons[suggestionValue] || {};
         el.style.display = 'flex';
         el.style.alignItems = 'center';
         el.style.gap = '0.25rem';
-    
-        if (React.isValidElement(iconObject.icon)) {
-            ReactDOM.render(iconObject.icon, el);
+        if (React.isValidElement(icon)) {
+            ReactDOM.render(icon, el);
             const textNode = document.createElement('span');
             textNode.textContent = value;
             el.appendChild(textNode);
         }
     }
-    
     selectSuggestion = (value: string, evt: MouseEvent | KeyboardEvent): void => {
         const { editor, start, end } = this.context || {};
-
-        if (editor && start && end) {
-            const textAfter = editor.getLine(end.line).substring(end.ch, end.ch + 1);
-            const hasBacktickAfter = textAfter === '`';
-            
-            if (hasBacktickAfter) {
+        if (editor && start && end && typeof end.ch === 'number' && typeof end.line === 'number') {
+            if (editor.getLine(end.line).substring(end.ch, end.ch + 1) === BACKTICK) {
                 editor.replaceRange('', { line: end.line, ch: end.ch }, { line: end.line, ch: end.ch + 1 });
             }
-        
-            const BACKTICK = '`';
             const replacement = `${BACKTICK}${this.currentTriggerWord}:${value}${BACKTICK}`;
-            
             editor.replaceRange(replacement, start, end);
         }
     }

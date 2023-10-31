@@ -47,6 +47,14 @@ class MonstrologyWidget extends WidgetType {
 
 type TriggerType = 'ali' | 'ele' | 'mon';
 
+function createDecoration(widget: WidgetType) {
+    return Decoration.replace({
+        widget,
+        inclusive: false,
+        block: false
+    });
+}
+
 export function MonstrologyLivePlugin(plugin: Monstrology) {
     return ViewPlugin.fromClass(
         class implements PluginValue {
@@ -86,40 +94,23 @@ export function MonstrologyLivePlugin(plugin: Monstrology) {
                                 if (range.from <= node.to+1 && range.to >= node.from-1) return
                             }
             
-                            const original = view.state.doc.sliceString(node.from, node.to)
+                            const original = view.state.doc.sliceString(node.from, node.to);
                             for (const replacement of replacements) {
                                 if (original.match(replacement.regex)) {
                                     const type = original.split(':')[1].trim();
-                                    if (MONSTER[type as keyof typeof MONSTER]?.icon) {
-                                        builder.add(
-                                            node.from-1,
-                                            node.to+1,
-                                            Decoration.replace({
-                                                widget: new MonstrologyWidget(type),
-                                                inclusive: false,
-                                                block: false
-                                            })
-                                        )
-                                    } else if (ELEMENT[type as keyof typeof ELEMENT]?.icon) {
-                                        builder.add(
-                                            node.from-1,
-                                            node.to+1,
-                                            Decoration.replace({
-                                                widget: new ElementWidget(type),
-                                                inclusive: false,
-                                                block: false
-                                            })
-                                        )
-                                    } else if (ALIGNMENT[type as keyof typeof ALIGNMENT]?.icon) {
-                                        builder.add(
-                                            node.from-1,
-                                            node.to+1,
-                                            Decoration.replace({
-                                                widget: new AlignmentWidget(type),
-                                                inclusive: false,
-                                                block: false
-                                            })
-                                        )
+                                    let widget;
+                                    if (MONSTER[type]?.icon) {
+                                        widget = new MonstrologyWidget(type);
+                                    } else if (ELEMENT[type]?.icon) {
+                                        widget = new ElementWidget(type);
+                                    } else if (ALIGNMENT[type]?.icon) {
+                                        widget = new AlignmentWidget(type);
+                                    }
+
+                                    if (widget) {
+                                        builder.add(node.from - 1, node.to + 1, createDecoration(widget));
+                                    } else {
+                                        console.error(`Unexpected type: ${type}`);
                                     }
                                 }
                             }

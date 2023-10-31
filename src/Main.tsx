@@ -100,25 +100,19 @@ export const MONSTER:IconType = {
 	Specter: { value: "Specter", icon: generateIcon(GiHood, "ghostwhite")},
 	Vampire: { value: "Vampire", icon: generateIcon(GiBatwingEmblem, "crimson")},
 };
-
+const TRIGGER_TYPES: Record<TriggerType, IconType> = {
+	'ali': ALIGNMENT,
+	'ele': ELEMENT,
+	'mon': MONSTER
+};
 export default class Monstrology extends Plugin {
 	settings: AllSettings;
 	private editorExtensions: Extension[] = []
 
 	createReplacements(trigger: TriggerType) {
-		let types: IconType;
-		switch (trigger) {
-			case 'ali':
-				types = ALIGNMENT;
-				break;
-			case 'ele':
-				types = ELEMENT;
-				break;
-			case 'mon':
-				types = MONSTER;
-				break;
-		}
-		return Object.values(types).map(type => { const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i');
+		const types = TRIGGER_TYPES[trigger];
+		return Object.values(types).map(type => {
+			const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${type.value}\\s*$`, 'i');
 			return { regex, type: type.value };
 		});
 	}
@@ -128,7 +122,7 @@ export default class Monstrology extends Plugin {
 		this.addSettingTab(new MonstrologySettingsTab(this.app, this))
 		this.registerMarkdownPostProcessor(this.markdownPostProcessor.bind(this))
 		this.registerEditorExtension(this.editorExtensions)
-        this.registerEditorSuggest(new SuggestionIcon(this.app));
+		this.registerEditorSuggest(new SuggestionIcon(this.app));
 		this.updateExtension()
 		console.log("Monstrology loaded");
 	}
@@ -171,25 +165,25 @@ export default class Monstrology extends Plugin {
 	}
 }
 class BaseMarkdownRenderChild extends MarkdownRenderChild {
-    constructor(element: HTMLElement, private type: string, private iconType: Record<string, {value: string, icon: JSX.Element}>) {
-        super(element)
-    }
+	constructor(element: HTMLElement, private type: string, private iconType: Record<string, {value: string, icon: JSX.Element}>) {
+		super(element)
+	}
 
-    onload() : void {
-        const typeClass = this.type.toLowerCase();
-        const Type = this.containerEl.createSpan({cls: `${typeClass}`})
-        const icon = this.iconType[this.type as keyof typeof this.iconType]?.icon;
-        ReactDOM.render(icon, Type);
-        this.containerEl.replaceWith(Type);
-    }
+	onload() : void {
+		const typeClass = this.type.toLowerCase();
+		const Type = this.containerEl.createSpan({cls: `${typeClass}`})
+		const icon = this.iconType[this.type as keyof typeof this.iconType]?.icon;
+		ReactDOM.render(icon, Type);
+		this.containerEl.replaceWith(Type);
+	}
 }
 
 function createMarkdownRenderChildClass(iconType: IconType) {
-    return class extends BaseMarkdownRenderChild {
-        constructor(element: HTMLElement, type: string) {
-            super(element, type, iconType);
-        }
-    }
+	return class extends BaseMarkdownRenderChild {
+		constructor(element: HTMLElement, type: string) {
+			super(element, type, iconType);
+		}
+	}
 }
 
 const AlignmentMarkdownRenderChild = createMarkdownRenderChildClass(ALIGNMENT);
