@@ -2,127 +2,24 @@ import { Extension } from "@codemirror/state";
 import { MarkdownPostProcessor, MarkdownRenderChild, Plugin } from "obsidian";
 import { MonstrologyLivePlugin } from "./live-preview";
 import MonstrologySettingsTab, {AllSettings, DEFAULT_SETTINGS,} from "./Settings";
-import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { BsFillLightningFill } from "react-icons/bs";
-import {
-	GiAlienStare,
-	GiAngelOutfit,
-	GiAngelWings,
-	GiArchitectMask,
-	GiBatwingEmblem,
-	GiBrute,
-	GiButterfly,
-	GiCrownedSkull,
-	GiCursedStar,
-	GiDeathSkull,
-	GiDesertSkull,
-	GiFist,
-	GiFlatPawPrint,
-	GiHood,
-	GiImpLaugh,
-	GiLifeSupport,
-	GiMaggot,
-	GiMoon,
-	GiMuscleUp,
-	GiPoisonBottle,
-	GiScales,
-	GiSlime,
-	GiStoneSphere,
-	GiStoneTower,
-	GiSun,
-	GiTombstone,
-	GiTwoFeathers,
-	GiWaterSplash,
-	GiWhirlwind,
-} from "react-icons/gi";
-import { FaDragon, FaHandHoldingHeart, FaRegCircle, FaRegSnowflake } from "react-icons/fa6";
-import { ImFire } from "react-icons/im";
-import { PiPlantFill } from "react-icons/pi";
-import { SiElement } from "react-icons/si";
 import SuggestionIcon from "./SuggestModel";
+import { IconType, TriggerType } from "./types";
+import { ALIGNMENT, ELEMENT, MONSTER, TRIGGER_TYPES } from "./constant";
 
-export type IconType = {
-	[key: string]: { value: string; icon: JSX.Element };
-};
-
-enum TriggerType {
-	Ali = 'ali',
-	Ele = 'ele',
-	Mon = 'mon'
-}
-
-export const CLASS_TYPES = {
-	ALI: "AlignmentType",
-	ELE: "ElementType",
-	MON: "MonsterType"
-};
-
-const globalStyle = { verticalAlign: "sub", fontSize: "1.5em" };
-const generateIcon = (IconComponent: React.ElementType, color: string) => (
-	<IconComponent style={{ ...globalStyle, color }} />
-);
-
-export const ALIGNMENT:IconType = {
-	LG: { value: "LG", icon: generateIcon(GiAngelWings, "lightgoldenrodyellow")},
-	NG: { value: "NG", icon: generateIcon(FaHandHoldingHeart, "pink")},
-	CG: { value: "CG", icon: generateIcon(GiFist, "dodgerblue")},
-	LN: { value: "LN", icon: generateIcon(GiScales, "goldenrod")},
-	TN: { value: "TN", icon: generateIcon(FaRegCircle, "white")},
-	CN: { value: "CN", icon: generateIcon(GiTwoFeathers, "mediumseagreen")},
-	LE: { value: "LE", icon: generateIcon(GiCrownedSkull, "orangered")},
-	NE: { value: "NE", icon: generateIcon(GiImpLaugh, "red")},
-	CE: { value: "CE", icon: generateIcon(GiBrute, "rebeccapurple")},
-};
-export const ELEMENT:IconType = {
-	Air: { value: "Air", icon: generateIcon(GiWhirlwind, "white")},
-	Dark: { value: "Dark", icon: generateIcon(GiMoon, "dimgray")},
-	Death: { value: "Death", icon: generateIcon(GiDeathSkull, "gainsboro")},
-	Earth: { value: "Earth", icon: generateIcon(GiStoneSphere, "darkgoldenrod")},
-	Fire: { value: "Fire", icon: generateIcon(ImFire, "red")},
-	Ice: { value: "Ice", icon: generateIcon(FaRegSnowflake, "lightcyan")},
-	Light: { value: "Light", icon: generateIcon(GiSun, "lightgoldenrodyellow")},
-	Lightning: { value: "Lightning", icon: generateIcon(BsFillLightningFill, "lightblue")},
-	Life: { value: "Life", icon: generateIcon(GiLifeSupport, "hotpink")},
-	Poison: { value: "Poison", icon: generateIcon(GiPoisonBottle, "lawngreen")},
-	Water: { value: "Water", icon: generateIcon(GiWaterSplash, "aqua")},
-};
-export const MONSTER:IconType = {
-	Aberration: { value: "Aberration", icon: generateIcon(GiAlienStare, "darkgray")},
-	Beast: { value: "Beast", icon: generateIcon(GiFlatPawPrint, "rebeccapurple")},
-	Celestial: { value: "Celestial", icon: generateIcon(GiAngelOutfit, "ivory") },
-	Construct: { value: "Construct", icon: generateIcon(GiStoneTower, "lightgray")},
-	Cursed: { value: "Cursed", icon: generateIcon(GiCursedStar, "lightslategray")},
-	Draconid: { value: "Draconid", icon: generateIcon(FaDragon, "mediumslateblue")},
-	Elementa: { value: "Elementa", icon: generateIcon(SiElement, "lightblue")},
-	Fairy: { value: "Fairy", icon: generateIcon(GiButterfly, "orchid")},
-	Fiend: { value: "Fiend", icon: generateIcon(GiDesertSkull, "darkred")},
-	Hybrid: { value: "Hybrid", icon: generateIcon(GiArchitectMask, "palegoldenrod")},
-	Insectoid: {value: "Insectoid", icon: generateIcon(GiMaggot, "yellowgreen")},
-	Necrophage: { value: "Necrophage", icon: generateIcon(GiTombstone, "gray")},
-	Ogroid: { value: "Ogroid", icon: generateIcon(GiMuscleUp, "orange")},
-	Ooze: { value: "Ooze", icon: generateIcon(GiSlime, "lightskyblue")},
-	Plant: { value: "Plant", icon: generateIcon(PiPlantFill, "limegreen")},
-	Specter: { value: "Specter", icon: generateIcon(GiHood, "ghostwhite")},
-	Vampire: { value: "Vampire", icon: generateIcon(GiBatwingEmblem, "crimson")},
-};
-
-const TRIGGER_TYPES: Record<TriggerType, IconType> = {
-	[TriggerType.Ali]: ALIGNMENT,
-	[TriggerType.Ele]: ELEMENT,
-	[TriggerType.Mon]: MONSTER
-};
+const VALUE_TO_KEY: { [key: string]: string } = {};
 
 export default class Monstrology extends Plugin {
 	settings: AllSettings;
 	private editorExtensions: Extension[] = []
 
 	createReplacements = (trigger: TriggerType) => {
-		const types = TRIGGER_TYPES[trigger];
-		return Object.values(types).map(({ value }) => {
-			const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${value}\\s*$`, 'i');
-			return { regex, type: value };
-		});
+    const types = TRIGGER_TYPES[trigger];
+    return Object.keys(types).map(key => {
+        const { value } = types[key];
+        const regex = new RegExp(`^\\s*${trigger}\\s*:\\s*${key}\\s*$`, 'i');
+        return { regex, type: value };
+    });
 	}
 
 	onload = async () => {
@@ -134,8 +31,13 @@ export default class Monstrology extends Plugin {
 		this.updateExtension();
 		console.log("Monstrology loaded");
 	}
+
 	loadSettings = async () => {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		Object.keys(this.settings).forEach(key => {
+			const value = this.settings[key];
+			VALUE_TO_KEY[value] = key;
+		});
 	}
 
 	updateExtension = () => {
@@ -146,6 +48,10 @@ export default class Monstrology extends Plugin {
 
 	saveSettings = async () => {
 		await this.saveData(this.settings);
+		Object.keys(this.settings).forEach(key => {
+			const value = this.settings[key];
+			VALUE_TO_KEY[value] = key;
+		})
 		this.updateExtension();
 	}
 	markdownPostProcessor = async (element: HTMLElement, context: MarkdownPostProcessor) => {
@@ -182,7 +88,8 @@ class BaseMarkdownRenderChild extends MarkdownRenderChild {
 	onload = () : void => {
 		const typeClass = this.type.toLowerCase();
 		const Type = this.containerEl.createSpan({cls: `${typeClass}`})
-		const icon = this.iconType[this.type as keyof typeof this.iconType]?.icon;
+		const iconKey = this.type;
+		const icon = this.iconType[iconKey as keyof typeof this.iconType]?.icon;
 		ReactDOM.render(icon, Type);
 		this.containerEl.replaceWith(Type);
 	}

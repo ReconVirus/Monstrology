@@ -28,13 +28,15 @@ Monstrology is a project that aims to add some visual flair to the names of mons
 
 <!-- USAGE -->
 ## Usage
-For each alignment, element, or monster type that you want to display, use the syntax 
+
+For each alignment, element, or monster type that you want to display, use the syntax
 ``
 `Key:Type`
-`` 
+``
 in your text, where Key is either `ali`, `ele`, or `mon`. Type is one of the supporting words you want to display
 
 ### Suggestion
+
 on a new line entering ` follow by a letter will show a list of icons for that given letter.
 
 ![image](https://github.com/ReconVirus/Monstrology/assets/43733760/b1faf6bb-5b43-4c6c-8fdf-23237ebc3938)
@@ -43,6 +45,7 @@ on a new line entering ` follow by a letter will show a list of icons for that g
 
 <!-- ROADMAP -->
 ## Roadmap
+
 - [x] Add Changelog
 - [x] Add more monster types
 - [x] Add element Support
@@ -53,13 +56,14 @@ on a new line entering ` follow by a letter will show a list of icons for that g
   - [ ] Change the icon's color
   - [ ] Change the icon's size
   - [x] Suggest icons
-  - [ ] Support icon-linking 
+  - [ ] Support icon-linking
 
 See the [open issues]() for a full list of proposed features (and known issues).
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
+
 <p align="center">Thank you for your interest in this project.</p>
 
 If you want to improve this project, you can fork the repo and create a pull request with your changes. You can also open an issue with the label "enhancement" to share your feedback or ideas.
@@ -68,26 +72,31 @@ Please show your support by giving the project a star! I appreciate your collabo
 <p align="center">To contribute to this project, follow these steps:</p>
 
 1. Fork the repo
-2. Create a new branch on your local machine 
+2. Create a new branch on your local machine
+
     ```sh
     git checkout -b Development/Monstrology
     ```
 
-3. Make your changes and commit them 
+3. Make your changes and commit them
+
     ```sh
     git commit -m 'Added some Feature'
     ```
 
-4. Push your branch to GitHub 
+4. Push your branch to GitHub
+
     ```sh
     git push origin Development/Monstrology
     ```
 
 5. Create a pull request and wait for review
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
+
 [![License][License-shield]][License-URL]
 
 See `LICENSE.txt` for more information.
@@ -95,15 +104,15 @@ See `LICENSE.txt` for more information.
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+
 Credit to
-* <img alt="Static Badge" src="https://img.shields.io/badge/Javalent-Dice--Roller-green?style=for-the-badge&logo=github&color=white&link=https%3A%2F%2Fgithub.com%2Fjavalent%2Fdice-roller">
-* <img alt="Static Badge" src="https://img.shields.io/badge/thiagocoutinhor-pf2--action--icons-white?style=for-the-badge&logo=github&color=white&link=https%3A%2F%2Fgithub.com%2Fthiagocoutinhor%2Fpf2-action-icons">
-* <img alt="Static Badge" src="https://img.shields.io/badge/Shields.io-For%20the%20awesome%20bagdes-green?style=for-the-badge&link=https%3A%2F%2Fshields.io%2F">
-* <img alt="Static Badge" src="https://img.shields.io/badge/Obsidian-v1.4.5-%237C3AED?style=for-the-badge&logo=obsidian&logoColor=%237C3AED&labelColor=%23000000&link=https%3A%2F%2Fobsidian.md%2F">
-* <img alt="Static Badge" src="https://img.shields.io/badge/React--Icons-blue?style=for-the-badge&logo=react&logoColor=%23A9225C&color=white&link=https%3A%2F%2Freact-icons.github.io%2Freact-icons%2F">
+- <img alt="Static Badge" src="https://img.shields.io/badge/Javalent-Dice--Roller-green?style=for-the-badge&logo=github&color=white&link=https%3A%2F%2Fgithub.com%2Fjavalent%2Fdice-roller">
+- <img alt="Static Badge" src="https://img.shields.io/badge/thiagocoutinhor-pf2--action--icons-white?style=for-the-badge&logo=github&color=white&link=https%3A%2F%2Fgithub.com%2Fthiagocoutinhor%2Fpf2-action-icons">
+- <img alt="Static Badge" src="https://img.shields.io/badge/Shields.io-For%20the%20awesome%20bagdes-green?style=for-the-badge&link=https%3A%2F%2Fshields.io%2F">
+- <img alt="Static Badge" src="https://img.shields.io/badge/Obsidian-v1.4.5-%237C3AED?style=for-the-badge&logo=obsidian&logoColor=%237C3AED&labelColor=%23000000&link=https%3A%2F%2Fobsidian.md%2F">
+- <img alt="Static Badge" src="https://img.shields.io/badge/React--Icons-blue?style=for-the-badge&logo=react&logoColor=%23A9225C&color=white&link=https%3A%2F%2Freact-icons.github.io%2Freact-icons%2F">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [License-shield]: https://img.shields.io/badge/license-WTFPL-white?link=http%3A%2F%2Fwww.wtfpl.net%2F

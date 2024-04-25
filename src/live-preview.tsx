@@ -1,9 +1,11 @@
-import Monstrology, { ALIGNMENT,CLASS_TYPES, ELEMENT, MONSTER } from "./Main"
+import { ALIGNMENT, ELEMENT, MONSTER, CLASS_TYPES } from "./constant";
+import Monstrology from "./Main"
 import { PluginValue, EditorView, ViewPlugin, ViewUpdate, WidgetType, Decoration, DecorationSet } from "@codemirror/view"
 import { RangeSetBuilder } from '@codemirror/state';
 import { syntaxTree } from "@codemirror/language";
 import { editorLivePreviewField } from "obsidian";
 import * as ReactDOM from 'react-dom';
+import { TriggerType } from "./types";
 
 class AlignmentWidget extends WidgetType {
     constructor(public alignmentType: string) {
@@ -40,12 +42,6 @@ class MonstrologyWidget extends WidgetType {
         ReactDOM.render(MONSTER[this.monsterType as keyof typeof MONSTER].icon, span);
         return span;
     }
-}
-
-enum TriggerType {
-	Ali = 'ali',
-	Ele = 'ele',
-	Mon = 'mon'
 }
 
 function createDecoration(widget: WidgetType) {

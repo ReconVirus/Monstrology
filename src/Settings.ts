@@ -1,6 +1,45 @@
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
-import Monstrology, { ALIGNMENT, CLASS_TYPES, ELEMENT, IconType, MONSTER, } from "./Main";
+import { ALIGNMENT, ELEMENT, MONSTER, CLASS_TYPES } from "./constant";
+import { generateIcon } from './IconUtils';
+import Monstrology from "./Main";
 import * as ReactDOM from "react-dom";
+import { BsFillLightningFill } from "react-icons/bs";
+import {
+	GiAlienStare,
+	GiAngelOutfit,
+	GiAngelWings,
+	GiArchitectMask,
+	GiBatwingEmblem,
+	GiBrute,
+	GiButterfly,
+	GiCrownedSkull,
+	GiCursedStar,
+	GiDeathSkull,
+	GiDesertSkull,
+	GiFist,
+	GiFlatPawPrint,
+	GiHood,
+	GiImpLaugh,
+	GiLifeSupport,
+	GiMaggot,
+	GiMoon,
+	GiMuscleUp,
+	GiPoisonBottle,
+	GiScales,
+	GiSlime,
+	GiStoneSphere,
+	GiStoneTower,
+	GiSun,
+	GiTombstone,
+	GiTwoFeathers,
+	GiWaterSplash,
+	GiWhirlwind,
+} from "react-icons/gi";
+import { FaDragon, FaHandHoldingHeart, FaRegCircle, FaRegSnowflake } from "react-icons/fa6";
+import { ImFire } from "react-icons/im";
+import { PiPlantFill } from "react-icons/pi";
+import { SiElement } from "react-icons/si";
+import { IconType } from "./types";
 
 export interface AlignmentSettings {
     [key: string]: string,
@@ -28,42 +67,48 @@ export interface ElementSettings {
     Poison: string,
     Water: string,
 }
+export interface IconSettings {
+    [key: string]: JSX.Element;
+}
 export interface MonsterSettings {
     [key: string]: string,
     Aberration: string,
-    Beast: string;
-    Celestial: string;
-    Construct: string;
-    Cursed: string;
-    Draconid: string;
-    Elementa: string;
+    Beast: string,
+    Celestial: string,
+    Construct: string,
+    Cursed: string,
+    Draconid: string,
+    Elementa: string,
     Fairy: string,
     Fiend: string,
-    Hybrid: string;
-    Insectoid: string;
-    Necrophage: string;
-    Ogroid: string;
-    Ooze: string;
-    Plant: string;
-    Specter: string;
-    Vampire: string;
+    Hybrid: string,
+    Insectoid: string,
+    Necrophage: string,
+    Ogroid: string,
+    Ooze: string,
+    Plant: string,
+    Specter: string,
+    Vampire: string,
 }
 export interface AllSettings {
+    [key: string]: any;
 	alignmentsettings: AlignmentSettings,
 	elementsettings: ElementSettings,
-	monstersettings: MonsterSettings
+	monstersettings: MonsterSettings,
+    iconsettings: IconSettings
 }
 
 export const DEFAULT_ALIGNMENT_SETTINGS: AlignmentSettings = {
-	LG:'Lawful Good',
-	NG:'Neutral Good',
-	CG:'Chaotic Good',
-	LN:'Lawful Neutral',
-	TN:'True Neutral',
-	CN:'Chaotic Neutral',
-	LE:'Lawful Evil',
-	NE:'Neutral Evil',
-	CE:'Chaotic Evil'
+    LG:"LG",
+    NG:"NG",
+    CG:"CG",
+    LN:"LN",
+    TN:"TN",
+    CN:"CN",
+    LE:"LE",
+    NE:"NE",
+
+    CE:"CE"
 };
 export const DEFAULT_ELEMENT_SETTINGS: ElementSettings = {
 	Air:"Air",
@@ -97,10 +142,52 @@ export const DEFAULT_MONSTER_SETTINGS: MonsterSettings = {
 	Specter:'Specter',
 	Vampire:'Vampire'
 };
+export const DEFAULT_ICONS: IconSettings = {
+    LG: generateIcon(GiAngelWings, "lightgoldenrodyellow"),
+    NG: generateIcon(FaHandHoldingHeart, "pink"),
+    CG: generateIcon(GiFist, "dodgerblue"),
+    LN: generateIcon(GiScales, "goldenrod"),
+    TN: generateIcon(FaRegCircle, "white"),
+    CN: generateIcon(GiTwoFeathers, "mediumseagreen"),
+    LE: generateIcon(GiCrownedSkull, "orangered"),
+    NE: generateIcon(GiImpLaugh, "red"),
+    CE: generateIcon(GiBrute, "rebeccapurple"),
+    // Element icons
+    Air: generateIcon(GiWhirlwind, "white"),
+	Dark: generateIcon(GiMoon, "dimgray"),
+	Death: generateIcon(GiDeathSkull, "gainsboro"),
+	Earth: generateIcon(GiStoneSphere, "darkgoldenrod"),
+	Fire: generateIcon(ImFire, "red"),
+	Ice: generateIcon(FaRegSnowflake, "lightcyan"),
+	Light: generateIcon(GiSun, "lightgoldenrodyellow"),
+	Lightning: generateIcon(BsFillLightningFill, "lightblue"),
+	Life: generateIcon(GiLifeSupport, "hotpink"),
+	Poison: generateIcon(GiPoisonBottle, "lawngreen"),
+	Water:generateIcon(GiWaterSplash, "aqua"),
+     // Monster icons
+    Aberration: generateIcon(GiAlienStare, "darkgray"),
+	Beast: generateIcon(GiFlatPawPrint, "rebeccapurple"),
+	Celestial: generateIcon(GiAngelOutfit, "ivory"),
+	Construct: generateIcon(GiStoneTower, "lightgray"),
+	Cursed: generateIcon(GiCursedStar, "lightslategray"),
+	Draconid: generateIcon(FaDragon, "mediumslateblue"),
+	Elementa: generateIcon(SiElement, "lightblue"),
+	Fairy:generateIcon(GiButterfly, "orchid"),
+	Fiend: generateIcon(GiDesertSkull, "darkred"),
+	Hybrid: generateIcon(GiArchitectMask, "palegoldenrod"),
+	Insectoid: generateIcon(GiMaggot, "yellowgreen"),
+	Necrophage: generateIcon(GiTombstone, "gray"),
+	Ogroid: generateIcon(GiMuscleUp, "orange"),
+	Ooze: generateIcon(GiSlime, "lightskyblue"),
+	Plant: generateIcon(PiPlantFill, "limegreen"),
+	Specter: generateIcon(GiHood, "ghostwhite"),
+	Vampire: generateIcon(GiBatwingEmblem, "crimson"),
+}
 export const DEFAULT_SETTINGS = {
 	alignmentsettings : DEFAULT_ALIGNMENT_SETTINGS,
 	elementsettings : DEFAULT_ELEMENT_SETTINGS,
-	monstersettings : DEFAULT_MONSTER_SETTINGS
+	monstersettings : DEFAULT_MONSTER_SETTINGS,
+    iconsettings: DEFAULT_ICONS
 };
 
 export default class MonstrologySettingsTab extends PluginSettingTab {
@@ -166,6 +253,7 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
             .addButton((button) =>
                 button.setButtonText('Save').onClick(async () => {
                     await this.plugin.saveSettings();
+                    await this.plugin.loadSettings();
                     new Notice('Settings saved.');
                     this.display();
                 }),
@@ -178,6 +266,7 @@ export default class MonstrologySettingsTab extends PluginSettingTab {
                 button.setButtonText('Reset').onClick(async () => {
                     this.plugin.settings = {...DEFAULT_SETTINGS};
                     await this.plugin.saveSettings();
+                    await this.plugin.loadSettings();
                     new Notice('Settings reset to default.');
                     this.display();
                 }),

@@ -6,7 +6,7 @@ import {
     EditorSuggestContext,
     EditorSuggestTriggerInfo,
 } from 'obsidian';
-import { ALIGNMENT, ELEMENT, MONSTER } from './Main';
+import { ALIGNMENT, ELEMENT, MONSTER } from './constant';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 
