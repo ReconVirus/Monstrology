@@ -8,6 +8,7 @@
 </div>
 
 <p align="center">Visual flair that displays an icon or icon font next to a monster name based on its type.</p>
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -99,7 +100,7 @@ Please show your support by giving the project a star! I appreciate your collabo
 
 [![License][License-shield]][License-URL]
 
-See `LICENSE.txt` for more information.
+See `LICENSE` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
